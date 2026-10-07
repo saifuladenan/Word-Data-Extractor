@@ -114,6 +114,24 @@ namespace Word_Data_Extractor
                 Height = 100,
                 Dock = DockStyle.Top
             };
+            Button btnRemove = new Button
+            {
+                Name = $"btnRemoveFilter{number}",
+                Text = "X",
+                Width = 20,
+                Height = 20,
+                Location = new Point(10, 70),
+                FlatStyle = FlatStyle.Flat,
+                ForeColor = Color.Red,
+                Font = new Font("Segoe UI", 7, FontStyle.Bold),
+                Cursor = Cursors.Hand
+            };
+            btnRemove.Click += (sender, e) =>
+            {
+                p_FilterContainer.Controls.Remove(filterPanel);
+                filterPanel.Dispose();
+            };
+
             Label filterPanelName = new Label
             {
                 Name = $"filterpanelName{number}",
@@ -166,6 +184,8 @@ namespace Word_Data_Extractor
             }
             groupboxfilter.Controls.Add(filterPanelName);
             groupboxfilter.Controls.Add(filterBoxName);
+            groupboxfilter.Controls.Add(btnRemove);
+
             filterPanel.Controls.Add(groupboxfilter);
             this.p_FilterContainer.Controls.Add(filterPanel);
         }

@@ -43,6 +43,7 @@
             txt_directory = new TextBox();
             p_Data = new Panel();
             dataGridView1 = new DataGridView();
+            panel3 = new Panel();
             p_Setting.SuspendLayout();
             gb_FilterContainer.SuspendLayout();
             p_FilterSetting.SuspendLayout();
@@ -60,7 +61,7 @@
             p_Setting.Dock = DockStyle.Left;
             p_Setting.Location = new Point(0, 0);
             p_Setting.Name = "p_Setting";
-            p_Setting.Size = new Size(312, 715);
+            p_Setting.Size = new Size(312, 793);
             p_Setting.TabIndex = 0;
             // 
             // gb_FilterContainer
@@ -70,7 +71,7 @@
             gb_FilterContainer.Dock = DockStyle.Fill;
             gb_FilterContainer.Location = new Point(0, 66);
             gb_FilterContainer.Name = "gb_FilterContainer";
-            gb_FilterContainer.Size = new Size(312, 649);
+            gb_FilterContainer.Size = new Size(312, 727);
             gb_FilterContainer.TabIndex = 2;
             gb_FilterContainer.TabStop = false;
             gb_FilterContainer.Text = "Select Filter";
@@ -82,7 +83,7 @@
             p_FilterContainer.Dock = DockStyle.Fill;
             p_FilterContainer.Location = new Point(3, 44);
             p_FilterContainer.Name = "p_FilterContainer";
-            p_FilterContainer.Size = new Size(306, 602);
+            p_FilterContainer.Size = new Size(306, 680);
             p_FilterContainer.TabIndex = 1;
             // 
             // p_FilterSetting
@@ -185,10 +186,11 @@
             // p_Data
             // 
             p_Data.Controls.Add(dataGridView1);
+            p_Data.Controls.Add(panel3);
             p_Data.Dock = DockStyle.Fill;
             p_Data.Location = new Point(0, 0);
             p_Data.Name = "p_Data";
-            p_Data.Size = new Size(1253, 715);
+            p_Data.Size = new Size(1253, 793);
             p_Data.TabIndex = 1;
             // 
             // dataGridView1
@@ -197,14 +199,22 @@
             dataGridView1.Dock = DockStyle.Fill;
             dataGridView1.Location = new Point(0, 0);
             dataGridView1.Name = "dataGridView1";
-            dataGridView1.Size = new Size(1253, 715);
+            dataGridView1.Size = new Size(1253, 744);
             dataGridView1.TabIndex = 0;
+            // 
+            // panel3
+            // 
+            panel3.Dock = DockStyle.Bottom;
+            panel3.Location = new Point(0, 744);
+            panel3.Name = "panel3";
+            panel3.Size = new Size(1253, 49);
+            panel3.TabIndex = 1;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1253, 715);
+            ClientSize = new Size(1253, 793);
             Controls.Add(p_Setting);
             Controls.Add(p_Data);
             Name = "MainForm";
@@ -240,5 +250,6 @@
         private Panel panel1;
         private Button btn_AddFilterForm;
         private Panel p_FilterContainer;
+        private Panel panel3;
     }
 }
