@@ -1,0 +1,17 @@
+C:\Users\user\source\repos\Word Data Extractor\Word Data Extractor\bin\Debug\net10.0-windows\Word Data Extractor.exe
+C:\Users\user\source\repos\Word Data Extractor\Word Data Extractor\bin\Debug\net10.0-windows\Word Data Extractor.deps.json
+C:\Users\user\source\repos\Word Data Extractor\Word Data Extractor\bin\Debug\net10.0-windows\Word Data Extractor.runtimeconfig.json
+C:\Users\user\source\repos\Word Data Extractor\Word Data Extractor\bin\Debug\net10.0-windows\Word Data Extractor.dll
+C:\Users\user\source\repos\Word Data Extractor\Word Data Extractor\bin\Debug\net10.0-windows\Word Data Extractor.pdb
+C:\Users\user\source\repos\Word Data Extractor\Word Data Extractor\obj\Debug\net10.0-windows\Word_Data_Extractor.Form1.resources
+C:\Users\user\source\repos\Word Data Extractor\Word Data Extractor\obj\Debug\net10.0-windows\Word Data Extractor.csproj.GenerateResource.cache
+C:\Users\user\source\repos\Word Data Extractor\Word Data Extractor\obj\Debug\net10.0-windows\Word Data Extractor.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\user\source\repos\Word Data Extractor\Word Data Extractor\obj\Debug\net10.0-windows\Word Data Extractor.AssemblyInfoInputs.cache
+C:\Users\user\source\repos\Word Data Extractor\Word Data Extractor\obj\Debug\net10.0-windows\Word Data Extractor.AssemblyInfo.cs
+C:\Users\user\source\repos\Word Data Extractor\Word Data Extractor\obj\Debug\net10.0-windows\Word Data Extractor.csproj.CoreCompileInputs.cache
+C:\Users\user\source\repos\Word Data Extractor\Word Data Extractor\obj\Debug\net10.0-windows\Word Data Extractor.dll
+C:\Users\user\source\repos\Word Data Extractor\Word Data Extractor\obj\Debug\net10.0-windows\refint\Word Data Extractor.dll
+C:\Users\user\source\repos\Word Data Extractor\Word Data Extractor\obj\Debug\net10.0-windows\Word Data Extractor.pdb
+C:\Users\user\source\repos\Word Data Extractor\Word Data Extractor\obj\Debug\net10.0-windows\Word Data Extractor.genruntimeconfig.cache
+C:\Users\user\source\repos\Word Data Extractor\Word Data Extractor\obj\Debug\net10.0-windows\ref\Word Data Extractor.dll
+C:\Users\user\source\repos\Word Data Extractor\Word Data Extractor\obj\Debug\net10.0-windows\Word_Data_Extractor.MainForm.resources
