@@ -14,13 +14,29 @@ namespace Word_Data_Extractor
         }
         private void ShowChildForm(Form childForm)
         {
+            foreach (Control control in p_Body.Controls)
+            {
+                if (control is Form form)
+                {
+                    form.Close();
+                    form.Dispose();
+                }
+            }
+
+            p_Body.Controls.Clear();
+
+            // Configure the new child form
             childForm.TopLevel = false;
             childForm.FormBorderStyle = FormBorderStyle.None;
             childForm.Dock = DockStyle.Fill;
-            p_Body.Controls.Clear();
+
+            // Add and display it
             p_Body.Controls.Add(childForm);
             childForm.Show();
             childForm.BringToFront();
         }
+
+
+
     }
 }

@@ -44,6 +44,12 @@
             p_Data = new Panel();
             dataGridView1 = new DataGridView();
             panel3 = new Panel();
+            btn_reset = new Button();
+            btn_FilterData = new Button();
+            button1 = new Button();
+            panel5 = new Panel();
+            panel7 = new Panel();
+            panel8 = new Panel();
             p_Setting.SuspendLayout();
             gb_FilterContainer.SuspendLayout();
             p_FilterSetting.SuspendLayout();
@@ -52,6 +58,7 @@
             gb_DirectoryContainer.SuspendLayout();
             p_Data.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            panel3.SuspendLayout();
             SuspendLayout();
             // 
             // p_Setting
@@ -59,9 +66,9 @@
             p_Setting.Controls.Add(gb_FilterContainer);
             p_Setting.Controls.Add(gb_DirectoryContainer);
             p_Setting.Dock = DockStyle.Left;
-            p_Setting.Location = new Point(0, 0);
+            p_Setting.Location = new Point(10, 0);
             p_Setting.Name = "p_Setting";
-            p_Setting.Size = new Size(312, 793);
+            p_Setting.Size = new Size(312, 650);
             p_Setting.TabIndex = 0;
             // 
             // gb_FilterContainer
@@ -71,7 +78,7 @@
             gb_FilterContainer.Dock = DockStyle.Fill;
             gb_FilterContainer.Location = new Point(0, 66);
             gb_FilterContainer.Name = "gb_FilterContainer";
-            gb_FilterContainer.Size = new Size(312, 727);
+            gb_FilterContainer.Size = new Size(312, 584);
             gb_FilterContainer.TabIndex = 2;
             gb_FilterContainer.TabStop = false;
             gb_FilterContainer.Text = "Select Filter";
@@ -83,7 +90,7 @@
             p_FilterContainer.Dock = DockStyle.Fill;
             p_FilterContainer.Location = new Point(3, 44);
             p_FilterContainer.Name = "p_FilterContainer";
-            p_FilterContainer.Size = new Size(306, 680);
+            p_FilterContainer.Size = new Size(306, 537);
             p_FilterContainer.TabIndex = 1;
             // 
             // p_FilterSetting
@@ -188,9 +195,9 @@
             p_Data.Controls.Add(dataGridView1);
             p_Data.Controls.Add(panel3);
             p_Data.Dock = DockStyle.Fill;
-            p_Data.Location = new Point(0, 0);
+            p_Data.Location = new Point(322, 0);
             p_Data.Name = "p_Data";
-            p_Data.Size = new Size(1253, 793);
+            p_Data.Size = new Size(769, 650);
             p_Data.TabIndex = 1;
             // 
             // dataGridView1
@@ -199,24 +206,88 @@
             dataGridView1.Dock = DockStyle.Fill;
             dataGridView1.Location = new Point(0, 0);
             dataGridView1.Name = "dataGridView1";
-            dataGridView1.Size = new Size(1253, 744);
-            dataGridView1.TabIndex = 0;
+            dataGridView1.Size = new Size(769, 606);
+            dataGridView1.TabIndex = 2;
             // 
             // panel3
             // 
+            panel3.Controls.Add(btn_reset);
+            panel3.Controls.Add(btn_FilterData);
+            panel3.Controls.Add(button1);
             panel3.Dock = DockStyle.Bottom;
-            panel3.Location = new Point(0, 744);
+            panel3.Location = new Point(0, 606);
             panel3.Name = "panel3";
-            panel3.Size = new Size(1253, 49);
+            panel3.Size = new Size(769, 44);
             panel3.TabIndex = 1;
+            // 
+            // btn_reset
+            // 
+            btn_reset.Dock = DockStyle.Right;
+            btn_reset.Enabled = false;
+            btn_reset.Location = new Point(319, 0);
+            btn_reset.Name = "btn_reset";
+            btn_reset.Size = new Size(150, 44);
+            btn_reset.TabIndex = 0;
+            btn_reset.Text = "Reset Filter";
+            btn_reset.UseVisualStyleBackColor = true;
+            btn_reset.Click += btn_reset_Click;
+            // 
+            // btn_FilterData
+            // 
+            btn_FilterData.Dock = DockStyle.Right;
+            btn_FilterData.Enabled = false;
+            btn_FilterData.Location = new Point(469, 0);
+            btn_FilterData.Name = "btn_FilterData";
+            btn_FilterData.Size = new Size(150, 44);
+            btn_FilterData.TabIndex = 0;
+            btn_FilterData.Text = "Filter Data";
+            btn_FilterData.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            button1.Dock = DockStyle.Right;
+            button1.Enabled = false;
+            button1.Location = new Point(619, 0);
+            button1.Name = "button1";
+            button1.Size = new Size(150, 44);
+            button1.TabIndex = 0;
+            button1.Text = "Extract Data";
+            button1.UseVisualStyleBackColor = true;
+            // 
+            // panel5
+            // 
+            panel5.Dock = DockStyle.Right;
+            panel5.Location = new Point(1091, 0);
+            panel5.Name = "panel5";
+            panel5.Size = new Size(10, 650);
+            panel5.TabIndex = 1;
+            // 
+            // panel7
+            // 
+            panel7.Dock = DockStyle.Bottom;
+            panel7.Location = new Point(10, 650);
+            panel7.Name = "panel7";
+            panel7.Size = new Size(1091, 10);
+            panel7.TabIndex = 4;
+            // 
+            // panel8
+            // 
+            panel8.Dock = DockStyle.Left;
+            panel8.Location = new Point(0, 0);
+            panel8.Name = "panel8";
+            panel8.Size = new Size(10, 660);
+            panel8.TabIndex = 5;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1253, 793);
-            Controls.Add(p_Setting);
+            ClientSize = new Size(1101, 660);
             Controls.Add(p_Data);
+            Controls.Add(panel5);
+            Controls.Add(p_Setting);
+            Controls.Add(panel7);
+            Controls.Add(panel8);
             Name = "MainForm";
             Text = "MainForm";
             Load += MainForm_Load;
@@ -230,6 +301,7 @@
             gb_DirectoryContainer.PerformLayout();
             p_Data.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            panel3.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -237,7 +309,6 @@
 
         private Panel p_Setting;
         private Panel p_Data;
-        private DataGridView dataGridView1;
         private GroupBox gb_DirectoryContainer;
         private Button btn_browse;
         private TextBox txt_directory;
@@ -251,5 +322,12 @@
         private Button btn_AddFilterForm;
         private Panel p_FilterContainer;
         private Panel panel3;
+        private Button btn_FilterData;
+        private Button button1;
+        private Panel panel5;
+        private Panel panel7;
+        private Panel panel8;
+        private DataGridView dataGridView1;
+        private Button btn_reset;
     }
 }

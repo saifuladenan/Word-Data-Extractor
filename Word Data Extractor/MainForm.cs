@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
@@ -32,11 +33,14 @@ namespace Word_Data_Extractor
                 if (folderDialog.ShowDialog() == DialogResult.OK)
                 {
                     txt_directory.Text = folderDialog.SelectedPath;
+                  
                     countfiles(txt_directory.Text);
                     lbl_FileFound.Visible = true;
                     lbl_totalFiles.Visible = true;
-                    gb_FilterContainer.Visible = true;
-                    LoadCBFilterForm();
+                    if (lbl_totalFiles.Text != "0") { 
+                        gb_FilterContainer.Visible = true;
+                        LoadCBFilterForm();
+                    }
                 }
             }
         }
@@ -46,7 +50,6 @@ namespace Word_Data_Extractor
             {
                 return;
             }
-
             try
             {
                 List<string> files = new List<string>();
@@ -62,6 +65,7 @@ namespace Word_Data_Extractor
                 );
                 int totalFiles = files.Count;
                 lbl_totalFiles.Text = totalFiles.ToString();
+       
             }
             catch (Exception ex)
             {
@@ -105,7 +109,7 @@ namespace Word_Data_Extractor
             GroupBox groupboxfilter = new GroupBox
             {
                 Dock = DockStyle.Fill,
-                Text = filterType
+                Text = filterType + $"      panelFilter{number}"
             };
             Panel filterPanel = new Panel
             {
@@ -130,6 +134,7 @@ namespace Word_Data_Extractor
             {
                 p_FilterContainer.Controls.Remove(filterPanel);
                 filterPanel.Dispose();
+                Updatebtn_FilterData();
             };
 
             Label filterPanelName = new Label
@@ -188,6 +193,7 @@ namespace Word_Data_Extractor
 
             filterPanel.Controls.Add(groupboxfilter);
             this.p_FilterContainer.Controls.Add(filterPanel);
+            Updatebtn_FilterData();
         }
         private void btn_reset_Click(object sender, EventArgs e)
         {
@@ -197,7 +203,13 @@ namespace Word_Data_Extractor
 
                 p_FilterContainer.Controls.RemoveAt(0);
                 control.Dispose();
+                Updatebtn_FilterData();
             }
+        }
+        private void Updatebtn_FilterData()
+        {
+            btn_FilterData.Enabled = p_FilterContainer.Controls.Count > 0;
+            btn_reset.Enabled = p_FilterContainer.Controls.Count > 0;
         }
     }
 }
