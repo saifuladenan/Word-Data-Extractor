@@ -42,7 +42,7 @@
             btn_browse = new Button();
             txt_directory = new TextBox();
             p_Data = new Panel();
-            dataGridView1 = new DataGridView();
+            dgv_FilterData = new DataGridView();
             panel3 = new Panel();
             btn_reset = new Button();
             btn_FilterData = new Button();
@@ -57,7 +57,7 @@
             panel1.SuspendLayout();
             gb_DirectoryContainer.SuspendLayout();
             p_Data.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgv_FilterData).BeginInit();
             panel3.SuspendLayout();
             SuspendLayout();
             // 
@@ -192,7 +192,7 @@
             // 
             // p_Data
             // 
-            p_Data.Controls.Add(dataGridView1);
+            p_Data.Controls.Add(dgv_FilterData);
             p_Data.Controls.Add(panel3);
             p_Data.Dock = DockStyle.Fill;
             p_Data.Location = new Point(322, 0);
@@ -200,14 +200,14 @@
             p_Data.Size = new Size(769, 650);
             p_Data.TabIndex = 1;
             // 
-            // dataGridView1
+            // dgv_FilterData
             // 
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Dock = DockStyle.Fill;
-            dataGridView1.Location = new Point(0, 0);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.Size = new Size(769, 606);
-            dataGridView1.TabIndex = 2;
+            dgv_FilterData.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgv_FilterData.Dock = DockStyle.Fill;
+            dgv_FilterData.Location = new Point(0, 0);
+            dgv_FilterData.Name = "dgv_FilterData";
+            dgv_FilterData.Size = new Size(769, 606);
+            dgv_FilterData.TabIndex = 2;
             // 
             // panel3
             // 
@@ -242,6 +242,7 @@
             btn_FilterData.TabIndex = 0;
             btn_FilterData.Text = "Filter Data";
             btn_FilterData.UseVisualStyleBackColor = true;
+            btn_FilterData.Click += btn_FilterData_Click;
             // 
             // button1
             // 
@@ -300,7 +301,7 @@
             gb_DirectoryContainer.ResumeLayout(false);
             gb_DirectoryContainer.PerformLayout();
             p_Data.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgv_FilterData).EndInit();
             panel3.ResumeLayout(false);
             ResumeLayout(false);
         }
@@ -327,7 +328,7 @@
         private Panel panel5;
         private Panel panel7;
         private Panel panel8;
-        private DataGridView dataGridView1;
+        private DataGridView dgv_FilterData;
         private Button btn_reset;
     }
 }

@@ -1,8 +1,86 @@
 {
   "version": 2,
-  "dgSpecHash": "LKLnSUUUYQg=",
+  "dgSpecHash": "9eXVN0CqbWA=",
   "success": true,
   "projectFilePath": "C:\\Users\\user\\source\\repos\\Word Data Extractor\\Word Data Extractor\\Word Data Extractor.csproj",
-  "expectedPackageFiles": [],
-  "logs": []
+  "expectedPackageFiles": [
+    "C:\\Users\\user\\.nuget\\packages\\npoi\\2.3.0\\npoi.2.3.0.nupkg.sha512",
+    "C:\\Users\\user\\.nuget\\packages\\npoi.hwpf\\2.3.0\\npoi.hwpf.2.3.0.nupkg.sha512",
+    "C:\\Users\\user\\.nuget\\packages\\sharpziplib\\0.86.0\\sharpziplib.0.86.0.nupkg.sha512",
+    "C:\\Users\\user\\.nuget\\packages\\system.text.encoding.codepages\\10.0.12\\system.text.encoding.codepages.10.0.12.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1510",
+      "level": "Warning",
+      "message": "PackageReference System.Text.Encoding.CodePages will not be pruned. This package is automatically available and does not need to be referenced explicitly. Remove the PackageReference item.",
+      "projectPath": "C:\\Users\\user\\source\\repos\\Word Data Extractor\\Word Data Extractor\\Word Data Extractor.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\user\\source\\repos\\Word Data Extractor\\Word Data Extractor\\Word Data Extractor.csproj",
+      "libraryId": "System.Text.Encoding.CodePages",
+      "targetGraphs": [
+        "net10.0-windows7.0"
+      ]
+    },
+    {
+      "code": "NU1902",
+      "level": "Warning",
+      "message": "Package 'SharpZipLib' 0.86.0 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-cqj4-m2pc-v9m5",
+      "projectPath": "C:\\Users\\user\\source\\repos\\Word Data Extractor\\Word Data Extractor\\Word Data Extractor.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\user\\source\\repos\\Word Data Extractor\\Word Data Extractor\\Word Data Extractor.csproj",
+      "libraryId": "SharpZipLib",
+      "targetGraphs": [
+        "net10.0-windows"
+      ]
+    },
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "message": "Package 'SharpZipLib' 0.86.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-m22m-h4rf-pwq3",
+      "projectPath": "C:\\Users\\user\\source\\repos\\Word Data Extractor\\Word Data Extractor\\Word Data Extractor.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\user\\source\\repos\\Word Data Extractor\\Word Data Extractor\\Word Data Extractor.csproj",
+      "libraryId": "SharpZipLib",
+      "targetGraphs": [
+        "net10.0-windows"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "message": "Package 'NPOI 2.3.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0-windows7.0'. This package may not be fully compatible with your project.",
+      "projectPath": "C:\\Users\\user\\source\\repos\\Word Data Extractor\\Word Data Extractor\\Word Data Extractor.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\user\\source\\repos\\Word Data Extractor\\Word Data Extractor\\Word Data Extractor.csproj",
+      "libraryId": "NPOI",
+      "targetGraphs": [
+        "net10.0-windows"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "message": "Package 'NPOI.HWPF 2.3.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0-windows7.0'. This package may not be fully compatible with your project.",
+      "projectPath": "C:\\Users\\user\\source\\repos\\Word Data Extractor\\Word Data Extractor\\Word Data Extractor.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\user\\source\\repos\\Word Data Extractor\\Word Data Extractor\\Word Data Extractor.csproj",
+      "libraryId": "NPOI.HWPF",
+      "targetGraphs": [
+        "net10.0-windows"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "message": "Package 'SharpZipLib 0.86.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0-windows7.0'. This package may not be fully compatible with your project.",
+      "projectPath": "C:\\Users\\user\\source\\repos\\Word Data Extractor\\Word Data Extractor\\Word Data Extractor.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\user\\source\\repos\\Word Data Extractor\\Word Data Extractor\\Word Data Extractor.csproj",
+      "libraryId": "SharpZipLib",
+      "targetGraphs": [
+        "net10.0-windows"
+      ]
+    }
+  ]
 }
