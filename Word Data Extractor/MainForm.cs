@@ -10,6 +10,9 @@ using System.Text.RegularExpressions;
 using RegexMatch = System.Text.RegularExpressions.Match;
 using RegexMatchCollection = System.Text.RegularExpressions.MatchCollection;
 using System.Text;
+using System.Linq;
+using System.Windows.Forms;
+using Microsoft.VisualBasic;
 namespace Word_Data_Extractor
 {
 
@@ -86,7 +89,6 @@ namespace Word_Data_Extractor
             cb_FilterForm.Items.Clear();
             cb_FilterForm.Items.Add("Lines Number");
             cb_FilterForm.Items.Add("After Lines Matched");
-            cb_FilterForm.Items.Add("Before Lines Matched");
 
             //cb_FilterForm.Items.Add("Text Contains");
             //cb_FilterForm.Items.Add("Text Starts With");
@@ -123,42 +125,32 @@ namespace Word_Data_Extractor
                 Text = filterType,
                 BackColor = Color.White,
             };
-            Panel filterPanel = new Panel
+            int panelHeight = 0;
+            if (filterType == "Lines Number" )
+            {
+                panelHeight = 80;
+            }
+            else if (filterType == "After Lines Matched") 
+            {
+                panelHeight = 100;
+            }
+                Panel filterPanel = new Panel
             {
                 Name = $"panelFilter{number}",
                 Width = 500,
-                Height = 100,
+                Height = panelHeight,
                 Dock = DockStyle.Top
             };
             groupboxfilter.Click += (sender, e) =>
             {
                 int smallHeight = 15;
-                int bigHeight = 100;
+                int bigHeight = panelHeight;
                if(filterPanel.Height > smallHeight)
                     filterPanel.Height = smallHeight;
                 else
-                    filterPanel.Height = bigHeight             
-;
+                    filterPanel.Height = bigHeight;
+            };
 
-            };
-            Button btnRemove = new Button
-            {
-                Name = $"btnRemoveFilter{number}",
-                Text = "X",
-                Width = 20,
-                Height = 20,
-                Location = new Point(10, 70),
-                FlatStyle = FlatStyle.Flat,
-                ForeColor = Color.Red,
-                Font = new Font("Segoe UI", 7, FontStyle.Bold),
-                Cursor = Cursors.Hand
-            };
-            btnRemove.Click += (sender, e) =>
-            {
-                p_FilterContainer.Controls.Remove(filterPanel);
-                filterPanel.Dispose();
-                Updatebtn_FilterData();
-            };
 
             Label filterPanelName = new Label
             {
@@ -175,35 +167,59 @@ namespace Word_Data_Extractor
                 Location = new Point(50, 15)
             };
 
-            if (filterType == "Lines Number") 
+            if (filterType == "Lines Number"  || filterType == "After Lines Matched") 
             {
-                Label lblLinesStart = new Label
+                int xCoordinate = 0;
+                int yCoordinate = 0;
+                if( filterType == "After Lines Matched")
+                {
+                     xCoordinate = 0;
+                     yCoordinate = 25;
+                }
+                    Label lblLinesStart = new Label
                 {
                     Name = $"lblLinesStart{number}",
-                            Text = "Start  :",
-                            AutoSize = true,
-                           Location = new Point(5, 45)
-                };
+                    Text = "Start:",
+                    AutoSize = true,
+                    Location = new Point(xCoordinate + 5, yCoordinate + 45) //5 , 45
+                    };
+
                 TextBox tbxLinesStart = new TextBox
                 {
                     Name = $"tbxLinesStart{number}",
                     BorderStyle = BorderStyle.FixedSingle,
                     Width = 50,
-                    Location = new Point(50, 40)
+                    Location = new Point(xCoordinate + 50, yCoordinate + 40) //50 , 40
                 };
+
                 Label lblLinesEnd = new Label
                 {
                     Name = $"lblLinesEnd{number}",
-                    Text = "End  :",
+                    Text = "End:",
                     AutoSize = true,
-                    Location = new Point(120, 45)
+                    Location = new Point(xCoordinate + 100, yCoordinate + 45) //120 , 45
                 };
+
                 TextBox tbxLinesEnd = new TextBox
                 {
                     Name = $"tbxLinesEnd{number}",
                     BorderStyle = BorderStyle.FixedSingle,
                     Width = 50,
-                    Location = new Point(160, 40)
+                    Location = new Point(xCoordinate + 135, yCoordinate + 40) //160 , 40
+                };
+                Label lblStringlengh = new Label
+                {
+                    Name = $"lblStringlengh{number}",
+                    Text = "Lenght",
+                    AutoSize = true,
+                    Location = new Point(xCoordinate + 200, yCoordinate + 45) //120 , 45
+                };
+                TextBox tbxStringlengh = new TextBox
+                {
+                    Name = $"tbxStringlengh{number}",
+                    BorderStyle = BorderStyle.FixedSingle,
+                    Width = 50,
+                    Location = new Point(xCoordinate + 250, yCoordinate + 40) //160 , 40
                 };
                 tbxLinesStart.KeyPress += (sender, e) =>
                 {
@@ -219,17 +235,36 @@ namespace Word_Data_Extractor
                         e.Handled = true;
                     }
                 };
+
                 groupboxfilter.Controls.Add(lblLinesStart);
                 groupboxfilter.Controls.Add(tbxLinesStart);
                 groupboxfilter.Controls.Add(lblLinesEnd);
                 groupboxfilter.Controls.Add(tbxLinesEnd);
+                groupboxfilter.Controls.Add(lblStringlengh);
+                groupboxfilter.Controls.Add(tbxStringlengh);
             }
-            if (filterType == "Before Lines Matched" || filterType == "After Lines Matched")
-            { 
+            if (filterType == "After Lines Matched")
+            {
+                Label lblStringMatch = new Label
+                {
+                    Name = $"lblStringMatch{number}",
+                    Text = "Find",
+                    AutoSize = true,
+                    Location = new Point(5, 45)
+                };
+                TextBox tbxStringMatch = new TextBox
+                {
+                    Name = $"tbxStringMatch{number}",
+                    BorderStyle = BorderStyle.FixedSingle,
+                    Width = 250,
+                    Location = new Point(50, 40)
+                };
+                groupboxfilter.Controls.Add(lblStringMatch);
+                groupboxfilter.Controls.Add(tbxStringMatch);
             }
                 groupboxfilter.Controls.Add(filterPanelName);
             groupboxfilter.Controls.Add(filterBoxName);
-            groupboxfilter.Controls.Add(btnRemove);
+            //groupboxfilter.Controls.Add(btnRemove);
 
             filterPanel.Controls.Add(groupboxfilter);
             this.p_FilterContainer.Controls.Add(filterPanel);
@@ -253,15 +288,17 @@ namespace Word_Data_Extractor
             btn_reset.Enabled = p_FilterContainer.Controls.Count > 0;
         }
 
-           private class FilterDefinition
-            {
-                public string FilterType { get; set; }
-                public string Name { get; set; }
-                public string Value { get; set; }
-                public int StartLine { get; set; }
-                public int EndLine { get; set; }
-            }
-   
+        private class FilterDefinition
+        {
+            public string FilterType { get; set; } = string.Empty;
+            public string Name { get; set; } = string.Empty;
+            public string Value { get; set; } = string.Empty;
+            public string FindMatch { get; set; } = string.Empty;
+            public int TextLenght { get; set; }
+            public int StartLine { get; set; }
+            public int EndLine { get; set; }
+        }
+
         private void btn_FilterData_Click(object sender, EventArgs e)
         {
             try
@@ -469,18 +506,16 @@ namespace Word_Data_Extractor
             switch (filter.FilterType)
             {
                 case "Lines Number":
-                    return SearchLines(
-                        text,
-                        filter.StartLine,
-                        filter.EndLine);
-
+                    return SearchLines(text,filter.StartLine,filter.EndLine);
+                case "After Lines Matched":
+                    return SearchLinesAfter(text, filter.FindMatch, filter.StartLine, filter.EndLine, filter.TextLenght);
                 default:
                     return "";
             }
         }
         private string SearchLines(string text, int startLine, int endLine)
         {
-            if (string.IsNullOrWhiteSpace(text))
+            if (string.IsNullOrWhiteSpace(text) )
                 return "";
 
             string[] lines = text.Split(
@@ -507,6 +542,54 @@ namespace Word_Data_Extractor
 
             return string.Join(Environment.NewLine, results);
         }
+       
+        private string SearchLinesAfter(string text, string FindMatch,int startLine, int endLine, int TextLeng)
+        {
+            if (string.IsNullOrWhiteSpace(text) ||string.IsNullOrWhiteSpace(FindMatch) || endLine < 1 || startLine > endLine)
+                return "";
+
+            string[] lines = text.Split(new[] { "\r\n", "\n", "\r" },StringSplitOptions.None);
+            if (startLine > lines.Length)
+                return "";
+            for (int i = 1; i < lines.Length; i++)
+            {
+                if (lines[i].Contains(
+                    FindMatch,
+                    StringComparison.OrdinalIgnoreCase))
+                {
+                    List<string> results = new List<string>();
+
+    
+                    int findLine = 1;
+                    for (int j = i +1 ; j < lines.Length; j++) 
+                    {
+                        string line = lines[j].Trim();
+
+                        if (string.IsNullOrWhiteSpace(line))
+                            continue;
+                        else
+                        if (findLine >= startLine)
+                        {
+                            if (TextLeng > 0 && line.Length > TextLeng)
+                            {
+                               line = line.Substring(0, TextLeng);
+                            }
+
+                                results.Add(line);
+                            
+                        }
+                        findLine = findLine + 1;
+                        if (results.Count >= endLine)
+                            break;
+                    }
+   
+                    return string.Join(Environment.NewLine, results);
+                }
+            }
+
+            return "";
+        }
+
         private List<FilterDefinition> GetFilters()
         {
             List<FilterDefinition> filters = new List<FilterDefinition>();
@@ -516,49 +599,77 @@ namespace Word_Data_Extractor
                 if (control is not Panel filterPanel)
                     continue;
 
-                if (filterPanel.Controls.Count == 0)
-                    continue;
+                GroupBox? groupBox = filterPanel.Controls
+                    .OfType<GroupBox>()
+                    .FirstOrDefault();
 
-                if (filterPanel.Controls[0] is not GroupBox groupBox)
+                if (groupBox == null)
                     continue;
 
                 string filterType = groupBox.Text.Trim();
 
-                TextBox startBox = null;
-                TextBox endBox = null;
-                TextBox nameBox = null;
 
-                foreach (Control child in groupBox.Controls)
+                TextBox? nameBox = FindTextBox(groupBox, "filterboxName");
+                TextBox? startBox = FindTextBox(groupBox, "tbxLinesStart");
+                TextBox? endBox = FindTextBox(groupBox, "tbxLinesEnd");
+                TextBox? findBox = FindTextBox(groupBox, "tbxStringMatch");
+                TextBox? LenghtBox = FindTextBox(groupBox, "tbxStringlengh");
+
+
+                if (filterType != "Lines Number" &&
+                    filterType != "After Lines Matched")
                 {
-                    if (child is TextBox textBox)
-                    {
-                        if (textBox.Name.StartsWith("tbxLinesStart"))
-                            startBox = textBox;
-                        else if (textBox.Name.StartsWith("tbxLinesEnd"))
-                            endBox = textBox;
-                        else if (textBox.Name.StartsWith("filterboxName"))
-                            nameBox = textBox;
-                    }
+                    MessageBox.Show($"Unknown filter type: {filterType}");
+                    return new List<FilterDefinition>();
                 }
 
-                if (startBox == null || endBox == null ||
-    !int.TryParse(startBox.Text, out int start) ||
-    !int.TryParse(endBox.Text, out int end) ||
-    start < 1 || end < start)
+                if (startBox == null ||
+                    endBox == null ||
+                    !int.TryParse(startBox.Text.Trim(), out int start) ||
+                    !int.TryParse(endBox.Text.Trim(), out int end) ||
+                    start < 1 ||
+                    end < start)
                 {
                     MessageBox.Show(
-                        "Please enter valid Start and End line numbers.",
+                        $"Please enter valid Start and End line numbers for '{filterType}'.",
                         "Invalid Line Range",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Warning);
 
                     return new List<FilterDefinition>();
                 }
+                if (!int.TryParse(LenghtBox.Text.Trim(), out int Stringlengh))
+                {
+                    return new List<FilterDefinition>();
+                }
+
+                string searchValue = string.Empty;
+
+
+                if ( filterType == "After Lines Matched")
+                {
+                    if (findBox == null ||
+                        string.IsNullOrWhiteSpace(findBox.Text))
+                    {
+                        MessageBox.Show(
+                            $"Please enter the Find text for '{filterType}'.",
+                            "Missing Search Text",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+
+                        return new List<FilterDefinition>();
+                    }
+
+                    searchValue = findBox.Text.Trim();
+                }
 
                 FilterDefinition filter = new FilterDefinition
                 {
                     FilterType = filterType,
-                    Name = nameBox?.Text.Trim() ?? "",
+                    Name = nameBox?.Text.Trim() ?? string.Empty,
+                    FindMatch = searchValue,
+                    Value = searchValue,
+                    TextLenght = Stringlengh,
                     StartLine = start,
                     EndLine = end
                 };
@@ -567,6 +678,27 @@ namespace Word_Data_Extractor
             }
 
             return filters;
+        }
+
+        private TextBox? FindTextBox(Control parent, string namePrefix)
+        {
+            foreach (Control child in parent.Controls)
+            {
+                if (child is TextBox textBox &&
+                    textBox.Name.StartsWith(
+                        namePrefix,
+                        StringComparison.OrdinalIgnoreCase))
+                {
+                    return textBox;
+                }
+
+                TextBox? result = FindTextBox(child, namePrefix);
+
+                if (result != null)
+                    return result;
+            }
+
+            return null;
         }
 
 
