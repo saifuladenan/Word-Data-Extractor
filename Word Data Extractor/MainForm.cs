@@ -13,6 +13,8 @@ using System.Text;
 using System.Linq;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 namespace Word_Data_Extractor
 {
 
@@ -54,7 +56,7 @@ namespace Word_Data_Extractor
                 }
             }
         }
-     
+
         private void countfiles(string folderPath)
         {
             if (!Directory.Exists(folderPath))
@@ -89,11 +91,7 @@ namespace Word_Data_Extractor
             cb_FilterForm.Items.Clear();
             cb_FilterForm.Items.Add("Lines Number");
             cb_FilterForm.Items.Add("After Lines Matched");
-
-            //cb_FilterForm.Items.Add("Text Contains");
-            //cb_FilterForm.Items.Add("Text Starts With");
-            //cb_FilterForm.Items.Add("Text Ends With");
-            //cb_FilterForm.Items.Add("Text Equals");
+            cb_FilterForm.Items.Add("Text Contains");
             //cb_FilterForm.Items.Add("Number Phone");
             //cb_FilterForm.Items.Add("Email Address");
             //cb_FilterForm.Items.Add("Regex");
@@ -126,15 +124,15 @@ namespace Word_Data_Extractor
                 BackColor = Color.White,
             };
             int panelHeight = 0;
-            if (filterType == "Lines Number" )
+            if (filterType == "Lines Number")
             {
                 panelHeight = 80;
             }
-            else if (filterType == "After Lines Matched") 
+            else if (filterType == "After Lines Matched")
             {
                 panelHeight = 100;
             }
-                Panel filterPanel = new Panel
+            Panel filterPanel = new Panel
             {
                 Name = $"panelFilter{number}",
                 Width = 500,
@@ -145,7 +143,7 @@ namespace Word_Data_Extractor
             {
                 int smallHeight = 15;
                 int bigHeight = panelHeight;
-               if(filterPanel.Height > smallHeight)
+                if (filterPanel.Height > smallHeight)
                     filterPanel.Height = smallHeight;
                 else
                     filterPanel.Height = bigHeight;
@@ -162,32 +160,32 @@ namespace Word_Data_Extractor
             TextBox filterBoxName = new TextBox
             {
                 Name = $"filterboxName{number}",
-                BorderStyle = BorderStyle.FixedSingle,
+                BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle,
                 Width = 250,
                 Location = new Point(50, 15)
             };
 
-            if (filterType == "Lines Number"  || filterType == "After Lines Matched") 
+            if (filterType == "Lines Number" || filterType == "After Lines Matched")
             {
                 int xCoordinate = 0;
                 int yCoordinate = 0;
-                if( filterType == "After Lines Matched")
+                if (filterType == "After Lines Matched")
                 {
-                     xCoordinate = 0;
-                     yCoordinate = 25;
+                    xCoordinate = 0;
+                    yCoordinate = 25;
                 }
-                    Label lblLinesStart = new Label
+                Label lblLinesStart = new Label
                 {
                     Name = $"lblLinesStart{number}",
                     Text = "Start:",
                     AutoSize = true,
                     Location = new Point(xCoordinate + 5, yCoordinate + 45) //5 , 45
-                    };
+                };
 
                 TextBox tbxLinesStart = new TextBox
                 {
                     Name = $"tbxLinesStart{number}",
-                    BorderStyle = BorderStyle.FixedSingle,
+                    BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle,
                     Width = 50,
                     Location = new Point(xCoordinate + 50, yCoordinate + 40) //50 , 40
                 };
@@ -203,7 +201,7 @@ namespace Word_Data_Extractor
                 TextBox tbxLinesEnd = new TextBox
                 {
                     Name = $"tbxLinesEnd{number}",
-                    BorderStyle = BorderStyle.FixedSingle,
+                    BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle,
                     Width = 50,
                     Location = new Point(xCoordinate + 135, yCoordinate + 40) //160 , 40
                 };
@@ -217,7 +215,7 @@ namespace Word_Data_Extractor
                 TextBox tbxStringlengh = new TextBox
                 {
                     Name = $"tbxStringlengh{number}",
-                    BorderStyle = BorderStyle.FixedSingle,
+                    BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle,
                     Width = 50,
                     Location = new Point(xCoordinate + 250, yCoordinate + 40) //160 , 40
                 };
@@ -255,14 +253,14 @@ namespace Word_Data_Extractor
                 TextBox tbxStringMatch = new TextBox
                 {
                     Name = $"tbxStringMatch{number}",
-                    BorderStyle = BorderStyle.FixedSingle,
+                    BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle,
                     Width = 250,
                     Location = new Point(50, 40)
                 };
                 groupboxfilter.Controls.Add(lblStringMatch);
                 groupboxfilter.Controls.Add(tbxStringMatch);
             }
-                groupboxfilter.Controls.Add(filterPanelName);
+            groupboxfilter.Controls.Add(filterPanelName);
             groupboxfilter.Controls.Add(filterBoxName);
             //groupboxfilter.Controls.Add(btnRemove);
 
@@ -379,37 +377,37 @@ namespace Word_Data_Extractor
                         rowNumber++;
                     }
                 }
-                        dgv_FilterData.DataSource = table;
+                dgv_FilterData.DataSource = table;
 
-                        dgv_FilterData.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+                dgv_FilterData.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
 
-                        foreach (DataGridViewColumn column in dgv_FilterData.Columns)
-                        {
-                            column.Width = 200;
-                            column.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-                        }
+                foreach (DataGridViewColumn column in dgv_FilterData.Columns)
+                {
+                    column.Width = 200;
+                    column.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+                }
 
-                        if (dgv_FilterData.Columns.Contains("No."))
-                        {
-                            dgv_FilterData.Columns["No."].Width = 60;
-                        }
+                if (dgv_FilterData.Columns.Contains("No."))
+                {
+                    dgv_FilterData.Columns["No."].Width = 60;
+                }
 
-                        if (dgv_FilterData.Columns.Contains("File Name"))
-                        {
-                            dgv_FilterData.Columns["File Name"].Width = 250;
-                        }
-                        dgv_FilterData.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+                if (dgv_FilterData.Columns.Contains("File Name"))
+                {
+                    dgv_FilterData.Columns["File Name"].Width = 250;
+                }
+                dgv_FilterData.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
 
-                        MessageBox.Show(
-                            $"Filtering completed.\r\n\r\n" +
-                            $"Files searched: {files.Count}\r\n" +
-                            $"Files detected: {table.Rows.Count}",
-                            "Complete",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Information);
+                MessageBox.Show(
+                    $"Filtering completed.\r\n\r\n" +
+                    $"Files searched: {files.Count}\r\n" +
+                    $"Files detected: {table.Rows.Count}",
+                    "Complete",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
 
-
-                    }
+                btn_exportData.Enabled = dgv_FilterData.Rows.Count > 0;
+            }
             catch (Exception ex)
             {
                 MessageBox.Show(
@@ -482,10 +480,10 @@ namespace Word_Data_Extractor
             }
             catch (NotSupportedException ex)
             {
-               Debug.Print(
-                    $"Unsupported operation while reading:\n{filePath}\n\n" +
-                    $"Error: {ex.Message}\n\n" +
-                    $"Details:\n{ex.StackTrace}");
+                Debug.Print(
+                     $"Unsupported operation while reading:\n{filePath}\n\n" +
+                     $"Error: {ex.Message}\n\n" +
+                     $"Details:\n{ex.StackTrace}");
 
                 throw;
             }
@@ -506,7 +504,7 @@ namespace Word_Data_Extractor
             switch (filter.FilterType)
             {
                 case "Lines Number":
-                    return SearchLines(text,filter.StartLine,filter.EndLine);
+                    return SearchLines(text, filter.StartLine, filter.EndLine);
                 case "After Lines Matched":
                     return SearchLinesAfter(text, filter.FindMatch, filter.StartLine, filter.EndLine, filter.TextLenght);
                 default:
@@ -515,7 +513,7 @@ namespace Word_Data_Extractor
         }
         private string SearchLines(string text, int startLine, int endLine)
         {
-            if (string.IsNullOrWhiteSpace(text) )
+            if (string.IsNullOrWhiteSpace(text))
                 return "";
 
             string[] lines = text.Split(
@@ -542,13 +540,13 @@ namespace Word_Data_Extractor
 
             return string.Join(Environment.NewLine, results);
         }
-       
-        private string SearchLinesAfter(string text, string FindMatch,int startLine, int endLine, int TextLeng)
+
+        private string SearchLinesAfter(string text, string FindMatch, int startLine, int endLine, int TextLeng)
         {
-            if (string.IsNullOrWhiteSpace(text) ||string.IsNullOrWhiteSpace(FindMatch) || endLine < 1 || startLine > endLine)
+            if (string.IsNullOrWhiteSpace(text) || string.IsNullOrWhiteSpace(FindMatch) || endLine < 1 || startLine > endLine)
                 return "";
 
-            string[] lines = text.Split(new[] { "\r\n", "\n", "\r" },StringSplitOptions.None);
+            string[] lines = text.Split(new[] { "\r\n", "\n", "\r" }, StringSplitOptions.None);
             if (startLine > lines.Length)
                 return "";
             for (int i = 1; i < lines.Length; i++)
@@ -559,30 +557,30 @@ namespace Word_Data_Extractor
                 {
                     List<string> results = new List<string>();
 
-    
+
                     int findLine = 1;
-                    for (int j = i +1 ; j < lines.Length; j++) 
+                    for (int j = i + 1; j < lines.Length; j++)
                     {
                         string line = lines[j].Trim();
 
                         if (string.IsNullOrWhiteSpace(line))
                             continue;
                         else
-                        if (findLine >= startLine)
-                        {
-                            if (TextLeng > 0 && line.Length > TextLeng)
+                            if (findLine >= startLine)
                             {
-                               line = line.Substring(0, TextLeng);
-                            }
+                                if (TextLeng > 0 && line.Length > TextLeng)
+                                {
+                                    line = line.Substring(0, TextLeng);
+                                }
 
                                 results.Add(line);
-                            
-                        }
+
+                            }
                         findLine = findLine + 1;
                         if (results.Count >= endLine)
                             break;
                     }
-   
+
                     return string.Join(Environment.NewLine, results);
                 }
             }
@@ -646,7 +644,7 @@ namespace Word_Data_Extractor
                 string searchValue = string.Empty;
 
 
-                if ( filterType == "After Lines Matched")
+                if (filterType == "After Lines Matched")
                 {
                     if (findBox == null ||
                         string.IsNullOrWhiteSpace(findBox.Text))
@@ -701,6 +699,130 @@ namespace Word_Data_Extractor
             return null;
         }
 
+        private void btn_exportData_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Check whether the DataGridView contains data
+                if (dgv_FilterData.Rows.Count == 0 ||
+                (dgv_FilterData.Rows.Count == 1 &&
+                dgv_FilterData.Rows[0].IsNewRow))
+                {
+                    MessageBox.Show(
+                    "No data available to export.",
+                    "Export Excel",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
 
+                    return;
+                }
+
+                // Select the Excel file location
+                using (SaveFileDialog saveDialog = new SaveFileDialog())
+                {
+                    saveDialog.Filter = "Excel Workbook (*.xlsx)|*.xlsx";
+                    saveDialog.Title = "Export Data to Excel";
+                    saveDialog.FileName = "FilteredData.xlsx";
+                    saveDialog.DefaultExt = "xlsx";
+                    saveDialog.AddExtension = true;
+
+                    if (saveDialog.ShowDialog() != DialogResult.OK)
+                        return;
+
+                    // Create Excel workbook and worksheet
+                    IWorkbook workbook = new XSSFWorkbook();
+                    ISheet sheet = workbook.CreateSheet("Filtered Data");
+
+                    // Create header row
+                    IRow headerRow = sheet.CreateRow(0);
+
+                    for (int col = 0; col < dgv_FilterData.Columns.Count; col++)
+                    {
+                        if (!dgv_FilterData.Columns[col].Visible)
+                            continue;
+
+                        NPOI.SS.UserModel.ICell cell = headerRow.CreateCell(col);
+                        cell.SetCellValue(
+                            dgv_FilterData.Columns[col].HeaderText);
+                    }
+
+                    // Create header style
+                    ICellStyle headerStyle = workbook.CreateCellStyle();
+                    IFont headerFont = workbook.CreateFont();
+                    headerFont.IsBold = true;
+                    headerStyle.SetFont(headerFont);
+
+                    for (int col = 0; col < dgv_FilterData.Columns.Count; col++)
+                    {
+                        if (!dgv_FilterData.Columns[col].Visible)
+                            continue;
+
+                        headerRow.GetCell(col).CellStyle = headerStyle;
+                    }
+
+                    // Export data rows
+                    int excelRowIndex = 1;
+
+                    foreach (DataGridViewRow dgvRow in dgv_FilterData.Rows)
+                    {
+                        if (dgvRow.IsNewRow)
+                            continue;
+
+                        IRow excelRow = sheet.CreateRow(excelRowIndex++);
+
+                        for (int col = 0; col < dgv_FilterData.Columns.Count; col++)
+                        {
+                            if (!dgv_FilterData.Columns[col].Visible)
+                                continue;
+
+                            object value = dgvRow.Cells[col].Value;
+
+                            NPOI.SS.UserModel.ICell cell = excelRow.CreateCell(col);
+
+                            cell.SetCellValue(
+                                value == null || value == DBNull.Value
+                                    ? ""
+                                    : value.ToString());
+                        }
+                    }
+
+                    // Automatically adjust column widths
+                    for (int col = 0; col < dgv_FilterData.Columns.Count; col++)
+                    {
+                        if (dgv_FilterData.Columns[col].Visible)
+                        {
+                            sheet.AutoSizeColumn(col);
+                        }
+                    }
+
+                    // Save Excel file
+                    using (FileStream fileStream = new FileStream(
+                        saveDialog.FileName,
+                        FileMode.Create,
+                        FileAccess.Write))
+                    {
+                        workbook.Write(fileStream);
+                    }
+
+                    workbook.Close();
+
+                    MessageBox.Show(
+                        "Data exported successfully!\n\n" +
+                        "File: " + saveDialog.FileName,
+                        "Export Complete",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Error exporting data to Excel:\n\n" + ex.Message,
+                    "Export Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+
+        }
     }
 }

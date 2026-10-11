@@ -46,7 +46,7 @@
             panel3 = new Panel();
             btn_reset = new Button();
             btn_FilterData = new Button();
-            button1 = new Button();
+            btn_exportData = new Button();
             panel5 = new Panel();
             panel7 = new Panel();
             panel8 = new Panel();
@@ -213,7 +213,7 @@
             // 
             panel3.Controls.Add(btn_reset);
             panel3.Controls.Add(btn_FilterData);
-            panel3.Controls.Add(button1);
+            panel3.Controls.Add(btn_exportData);
             panel3.Dock = DockStyle.Bottom;
             panel3.Location = new Point(0, 606);
             panel3.Name = "panel3";
@@ -244,16 +244,17 @@
             btn_FilterData.UseVisualStyleBackColor = true;
             btn_FilterData.Click += btn_FilterData_Click;
             // 
-            // button1
+            // btn_exportData
             // 
-            button1.Dock = DockStyle.Right;
-            button1.Enabled = false;
-            button1.Location = new Point(619, 0);
-            button1.Name = "button1";
-            button1.Size = new Size(150, 44);
-            button1.TabIndex = 0;
-            button1.Text = "Extract Data";
-            button1.UseVisualStyleBackColor = true;
+            btn_exportData.Dock = DockStyle.Right;
+            btn_exportData.Enabled = false;
+            btn_exportData.Location = new Point(619, 0);
+            btn_exportData.Name = "btn_exportData";
+            btn_exportData.Size = new Size(150, 44);
+            btn_exportData.TabIndex = 0;
+            btn_exportData.Text = "Export Data";
+            btn_exportData.UseVisualStyleBackColor = true;
+            btn_exportData.Click += btn_exportData_Click;
             // 
             // panel5
             // 
@@ -324,7 +325,7 @@
         private Panel p_FilterContainer;
         private Panel panel3;
         private Button btn_FilterData;
-        private Button button1;
+        private Button btn_exportData;
         private Panel panel5;
         private Panel panel7;
         private Panel panel8;
