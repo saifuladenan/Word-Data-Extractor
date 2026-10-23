@@ -1,23 +1,15 @@
 ﻿using NPOI.HWPF;
 using NPOI.HWPF.Extractor;
 using NPOI.XWPF.UserModel;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing.Imaging.Effects;
-using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
-using RegexMatch = System.Text.RegularExpressions.Match;
-using RegexMatchCollection = System.Text.RegularExpressions.MatchCollection;
-using System.Text;
-using System.Linq;
-using System.Windows.Forms;
-using Microsoft.VisualBasic;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using System.Data;
+using System.Diagnostics;
+
+using System.Text;
+
 namespace Word_Data_Extractor
 {
-
     public partial class MainForm : Form
     {
         public MainForm()
@@ -31,10 +23,17 @@ namespace Word_Data_Extractor
             lbl_FileFound.Visible = false;
             lbl_totalFiles.Visible = false;
             gb_FilterContainer.Visible = false;
+
             p_FilterContainer.HorizontalScroll.Visible = false;
+
             dgv_FilterData.DataSource = null;
+
+            btn_FilterData.Enabled = false;
+            btn_reset.Enabled = false;
+            btn_exportData.Enabled = false;
         }
 
+        // Browse folder
         private void btn_browse_Click(object sender, EventArgs e)
         {
             using (FolderBrowserDialog folderDialog = new FolderBrowserDialog())
@@ -46,228 +45,245 @@ namespace Word_Data_Extractor
                     txt_directory.Text = folderDialog.SelectedPath;
 
                     countfiles(txt_directory.Text);
+
                     lbl_FileFound.Visible = true;
                     lbl_totalFiles.Visible = true;
-                    if (lbl_totalFiles.Text != "0")
-                    {
-                        gb_FilterContainer.Visible = true;
-                        LoadCBFilterForm();
-                    }
+
+                    gb_FilterContainer.Visible =
+                        int.TryParse(lbl_totalFiles.Text, out int total)
+                        && total > 0;
                 }
             }
         }
 
+        // Count supported files
         private void countfiles(string folderPath)
         {
             if (!Directory.Exists(folderPath))
-            {
                 return;
-            }
+
             try
             {
                 List<string> files = new List<string>();
 
-                files.AddRange(
-                    Directory.GetFiles(folderPath, "*.doc", SearchOption.AllDirectories)
-                );
-                files.AddRange(
-                    Directory.GetFiles(folderPath, "*.docx", SearchOption.AllDirectories)
-                );
-                files.AddRange(
-                    Directory.GetFiles(folderPath, "*.txt", SearchOption.AllDirectories)
-                );
-                int totalFiles = files.Count;
-                lbl_totalFiles.Text = totalFiles.ToString();
+                files.AddRange(Directory.GetFiles(
+                    folderPath, "*.doc", SearchOption.AllDirectories));
 
+                files.AddRange(Directory.GetFiles(
+                    folderPath, "*.docx", SearchOption.AllDirectories));
+
+                files.AddRange(Directory.GetFiles(
+                    folderPath, "*.txt", SearchOption.AllDirectories));
+
+                lbl_totalFiles.Text = files.Count.ToString();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error: " + ex.Message);
             }
-
-        }
-        private void LoadCBFilterForm()
-        {
-            cb_FilterForm.Items.Clear();
-            cb_FilterForm.Items.Add("Lines Number");
-            cb_FilterForm.Items.Add("After Lines Matched");
-            cb_FilterForm.Items.Add("Text Contains");
-            //cb_FilterForm.Items.Add("Number Phone");
-            //cb_FilterForm.Items.Add("Email Address");
-            //cb_FilterForm.Items.Add("Regex");
-
-            cb_FilterForm.SelectedIndex = -1;
         }
 
+        // Add filter
         private void btn_AddFilterForm_Click(object sender, EventArgs e)
         {
-            if (cb_FilterForm.SelectedItem is not string filterType)
-            {
-                MessageBox.Show("Please select a filter type.");
-                return;
-            }
-            AddFilterPanel(filterType);
+            string filterName = txbx_FilterName.Text.Trim();
+
+            AddFilterPanel(filterName);
         }
-        private void AddFilterPanel(string filterType)
+
+        // Create dynamic filter panel
+        private void AddFilterPanel(string filterName)
         {
             int number = 1;
 
-            while (this.p_FilterContainer.Controls.ContainsKey($"panelFilter{number}"))
-            {
+            while (p_FilterContainer.Controls.ContainsKey($"Filter{number}"))
                 number++;
-            }
 
-            System.Windows.Forms.GroupBox groupboxfilter = new System.Windows.Forms.GroupBox
+            if (string.IsNullOrWhiteSpace(filterName))
+                filterName = $"Filter{number}";
+
+            int smallHeight = 20;
+            int bigHeight = 165;
+
+            GroupBox groupBoxFilter = new GroupBox
             {
                 Dock = DockStyle.Fill,
-                Text = filterType,
-                BackColor = Color.White,
+                Text = filterName,
+                BackColor = Color.White
             };
-            int panelHeight = 0;
-            if (filterType == "Lines Number")
-            {
-                panelHeight = 80;
-            }
-            else if (filterType == "After Lines Matched")
-            {
-                panelHeight = 100;
-            }
+
             Panel filterPanel = new Panel
             {
-                Name = $"panelFilter{number}",
+                Name = $"Filter{number}",
                 Width = 500,
-                Height = panelHeight,
+                Height = bigHeight,
                 Dock = DockStyle.Top
             };
-            groupboxfilter.Click += (sender, e) =>
+
+            groupBoxFilter.Click += (sender, e) =>
             {
-                int smallHeight = 15;
-                int bigHeight = panelHeight;
-                if (filterPanel.Height > smallHeight)
-                    filterPanel.Height = smallHeight;
-                else
-                    filterPanel.Height = bigHeight;
+                filterPanel.Height =
+                    filterPanel.Height > smallHeight
+                    ? smallHeight
+                    : bigHeight;
             };
 
-
-            Label filterPanelName = new Label
+            //search value 
+            Label lblSearchValue = new Label
             {
-                Name = $"filterpanelName{number}",
-                Text = "Name",
+                Name = $"lblSearchValue{number}",
+                Text = "Search Value",
                 AutoSize = true,
-                Location = new Point(5, 20)
+                Location = new Point(5, 30)
             };
-            TextBox filterBoxName = new TextBox
+
+            TextBox txbxSearchValue = new TextBox
             {
-                Name = $"filterboxName{number}",
+                Name = $"txbxSearchValue{number}",
                 BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle,
-                Width = 250,
-                Location = new Point(50, 15)
+                Width = 200,
+                Location = new Point(80, 25)
             };
 
-            if (filterType == "Lines Number" || filterType == "After Lines Matched")
+            groupBoxFilter.Controls.Add(lblSearchValue);
+            groupBoxFilter.Controls.Add(txbxSearchValue);
+
+            //section interface
+            Label lblSearchBetweenLine = new Label
             {
-                int xCoordinate = 0;
-                int yCoordinate = 0;
-                if (filterType == "After Lines Matched")
-                {
-                    xCoordinate = 0;
-                    yCoordinate = 25;
-                }
-                Label lblLinesStart = new Label
-                {
-                    Name = $"lblLinesStart{number}",
-                    Text = "Start:",
-                    AutoSize = true,
-                    Location = new Point(xCoordinate + 5, yCoordinate + 45) //5 , 45
-                };
+                Name = $"lblSearchBetweenLine{number}",
+                Text = "Search Section",
+                AutoSize = true,
+                Location = new Point(5, 50)
+            };
 
-                TextBox tbxLinesStart = new TextBox
-                {
-                    Name = $"tbxLinesStart{number}",
-                    BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle,
-                    Width = 50,
-                    Location = new Point(xCoordinate + 50, yCoordinate + 40) //50 , 40
-                };
-
-                Label lblLinesEnd = new Label
-                {
-                    Name = $"lblLinesEnd{number}",
-                    Text = "End:",
-                    AutoSize = true,
-                    Location = new Point(xCoordinate + 100, yCoordinate + 45) //120 , 45
-                };
-
-                TextBox tbxLinesEnd = new TextBox
-                {
-                    Name = $"tbxLinesEnd{number}",
-                    BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle,
-                    Width = 50,
-                    Location = new Point(xCoordinate + 135, yCoordinate + 40) //160 , 40
-                };
-                Label lblStringlengh = new Label
-                {
-                    Name = $"lblStringlengh{number}",
-                    Text = "Lenght",
-                    AutoSize = true,
-                    Location = new Point(xCoordinate + 200, yCoordinate + 45) //120 , 45
-                };
-                TextBox tbxStringlengh = new TextBox
-                {
-                    Name = $"tbxStringlengh{number}",
-                    BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle,
-                    Width = 50,
-                    Location = new Point(xCoordinate + 250, yCoordinate + 40) //160 , 40
-                };
-                tbxLinesStart.KeyPress += (sender, e) =>
-                {
-                    if (!char.IsDigit(e.KeyChar) && e.KeyChar != (char)Keys.Back)
-                    {
-                        e.Handled = true;
-                    }
-                };
-                tbxLinesEnd.KeyPress += (sender, e) =>
-                {
-                    if (!char.IsDigit(e.KeyChar) && e.KeyChar != (char)Keys.Back)
-                    {
-                        e.Handled = true;
-                    }
-                };
-
-                groupboxfilter.Controls.Add(lblLinesStart);
-                groupboxfilter.Controls.Add(tbxLinesStart);
-                groupboxfilter.Controls.Add(lblLinesEnd);
-                groupboxfilter.Controls.Add(tbxLinesEnd);
-                groupboxfilter.Controls.Add(lblStringlengh);
-                groupboxfilter.Controls.Add(tbxStringlengh);
-            }
-            if (filterType == "After Lines Matched")
+            Label lblSearchBetweenLineStart = new Label
             {
-                Label lblStringMatch = new Label
-                {
-                    Name = $"lblStringMatch{number}",
-                    Text = "Find",
-                    AutoSize = true,
-                    Location = new Point(5, 45)
-                };
-                TextBox tbxStringMatch = new TextBox
-                {
-                    Name = $"tbxStringMatch{number}",
-                    BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle,
-                    Width = 250,
-                    Location = new Point(50, 40)
-                };
-                groupboxfilter.Controls.Add(lblStringMatch);
-                groupboxfilter.Controls.Add(tbxStringMatch);
-            }
-            groupboxfilter.Controls.Add(filterPanelName);
-            groupboxfilter.Controls.Add(filterBoxName);
-            //groupboxfilter.Controls.Add(btnRemove);
+                Name = $"lblSearchBetweenLineStart{number}",
+                Text = "Start",
+                AutoSize = true,
+                Location = new Point(5, 70)
+            };
 
-            filterPanel.Controls.Add(groupboxfilter);
-            this.p_FilterContainer.Controls.Add(filterPanel);
+            Label lblSearchBetweenLineEnd = new Label
+            {
+                Name = $"lblSearchBetweenLineEnd{number}",
+                Text = "End",
+                AutoSize = true,
+                Location = new Point(95, 70)
+            };
+
+            TextBox txbxSearchBetweenLineStart = new TextBox
+            {
+                Name = $"txbxSearchBetweenLineStart{number}",
+                BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle,
+                Width = 50,
+                Location = new Point(40, 65)
+            };
+
+            TextBox txbxSearchBetweenLineEnd = new TextBox
+            {
+                Name = $"txbxSearchBetweenLineEnd{number}",
+                BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle,
+                Width = 50,
+                Location = new Point(125, 65)
+            };
+
+            groupBoxFilter.Controls.Add(lblSearchBetweenLine);
+            groupBoxFilter.Controls.Add(lblSearchBetweenLineStart);
+            groupBoxFilter.Controls.Add(lblSearchBetweenLineEnd);
+            groupBoxFilter.Controls.Add(txbxSearchBetweenLineStart);
+            groupBoxFilter.Controls.Add(txbxSearchBetweenLineEnd);
+            //  Range interface
+            Label lblFilterBetweenLine = new Label
+            {
+                Name = $"lblFilterBetweenLine{number}",
+                Text = "Filter Range Line",
+                AutoSize = true,
+                Location = new Point(5, 90)
+            };
+
+            Label lblFilterBetweenLineStart = new Label
+            {
+                Name = $"lblFilterBetweenLineStart{number}",
+                Text = "Start",
+                AutoSize = true,
+                Location = new Point(5, 110)
+            };
+
+            Label lblFilterBetweenLineEnd = new Label
+            {
+                Name = $"lblFilterBetweenLineEnd{number}",
+                Text = "End",
+                AutoSize = true,
+                Location = new Point(95, 110)
+            };
+
+            Label lblFilterBetweenLineLength = new Label
+            {
+                Name = $"lblFilterBetweenLineLength{number}",
+                Text = "Length",
+                AutoSize = true,
+                Location = new Point(180, 110)
+            };
+
+            TextBox txbxFilterBetweenLineStart = new TextBox
+            {
+                Name = $"txbxFilterBetweenLineStart{number}",
+                BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle,
+                Width = 50,
+                Location = new Point(40, 110)
+            };
+
+            TextBox txbxFilterBetweenLineEnd = new TextBox
+            {
+                Name = $"txbxFilterBetweenLineEnd{number}",
+                BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle,
+                Width = 50,
+                Location = new Point(125, 110)
+            };
+
+            TextBox txbxFilterBetweenLineLength = new TextBox
+            {
+                Name = $"txbxFilterBetweenLineLenght{number}",
+                BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle,
+                Width = 50,
+                Location = new Point(230, 110)
+            };
+
+            groupBoxFilter.Controls.Add(lblFilterBetweenLine);
+            groupBoxFilter.Controls.Add(lblFilterBetweenLineStart);
+            groupBoxFilter.Controls.Add(lblFilterBetweenLineEnd);
+            groupBoxFilter.Controls.Add(lblFilterBetweenLineLength);
+            groupBoxFilter.Controls.Add(txbxFilterBetweenLineStart);
+            groupBoxFilter.Controls.Add(txbxFilterBetweenLineEnd);
+            groupBoxFilter.Controls.Add(txbxFilterBetweenLineLength);
+            //include check box
+            CheckBox cbIncludeSearchText = new CheckBox
+            {
+                Name = $"cbIncludeSearchText{number}",
+                AutoSize = true,
+                Location = new Point(10, 140)
+            };
+            Label lblIncludeSearchText = new Label
+            {
+                Name = $"lblIncludeSearchText{number}",
+                Text = "Include Search Text",
+                AutoSize = true,
+                Location = new Point(25, 140)
+            };
+            groupBoxFilter.Controls.Add(lblIncludeSearchText);
+            groupBoxFilter.Controls.Add(cbIncludeSearchText);
+            filterPanel.Controls.Add(groupBoxFilter);
+
+            // Add newest panel to the top
+            p_FilterContainer.Controls.Add(filterPanel);
+            p_FilterContainer.Controls.SetChildIndex(filterPanel, 0);
+
             Updatebtn_FilterData();
         }
+
+        // Reset filters
         private void btn_reset_Click(object sender, EventArgs e)
         {
             while (p_FilterContainer.Controls.Count > 0)
@@ -276,27 +292,36 @@ namespace Word_Data_Extractor
 
                 p_FilterContainer.Controls.RemoveAt(0);
                 control.Dispose();
-                dgv_FilterData.DataSource = null;
-                Updatebtn_FilterData();
             }
+
+            dgv_FilterData.DataSource = null;
+            btn_exportData.Enabled = false;
+
+            Updatebtn_FilterData();
         }
+
         private void Updatebtn_FilterData()
         {
-            btn_FilterData.Enabled = p_FilterContainer.Controls.Count > 0;
-            btn_reset.Enabled = p_FilterContainer.Controls.Count > 0;
+            bool hasFilters = p_FilterContainer.Controls.Count > 0;
+
+            btn_FilterData.Enabled = hasFilters;
+            btn_reset.Enabled = hasFilters;
         }
 
+        // Filter settings
         private class FilterDefinition
         {
-            public string FilterType { get; set; } = string.Empty;
-            public string Name { get; set; } = string.Empty;
-            public string Value { get; set; } = string.Empty;
+            public string FilterName { get; set; } = string.Empty;
             public string FindMatch { get; set; } = string.Empty;
             public int TextLenght { get; set; }
-            public int StartLine { get; set; }
-            public int EndLine { get; set; }
+            public int sectionStartLine { get; set; }
+            public int sectionEndLine { get; set; }
+            public int rangeStartLine { get; set; }
+            public int rangeEndLine { get; set; }
+            public bool includeText { get; set; }
         }
 
+        // Execute filtering
         private void btn_FilterData_Click(object sender, EventArgs e)
         {
             try
@@ -304,9 +329,8 @@ namespace Word_Data_Extractor
                 List<FilterDefinition> filters = GetFilters();
 
                 if (filters.Count == 0)
-                {
                     return;
-                }
+
                 if (!Directory.Exists(txt_directory.Text))
                 {
                     MessageBox.Show(
@@ -317,36 +341,45 @@ namespace Word_Data_Extractor
 
                     return;
                 }
+
                 List<string> files = new List<string>();
-                files.AddRange(Directory.GetFiles(txt_directory.Text, "*.doc", SearchOption.AllDirectories));
-                files.AddRange(Directory.GetFiles(txt_directory.Text, "*.docx", SearchOption.AllDirectories));
-                files.AddRange(Directory.GetFiles(txt_directory.Text, "*.txt", SearchOption.AllDirectories));
+
+                files.AddRange(Directory.GetFiles(
+                    txt_directory.Text, "*.doc", SearchOption.AllDirectories));
+
+                files.AddRange(Directory.GetFiles(
+                    txt_directory.Text, "*.docx", SearchOption.AllDirectories));
+
+                files.AddRange(Directory.GetFiles(
+                    txt_directory.Text, "*.txt", SearchOption.AllDirectories));
 
                 DataTable table = new DataTable();
+
                 table.Columns.Add("No.", typeof(int));
                 table.Columns.Add("File Name", typeof(string));
+
                 foreach (FilterDefinition filter in filters)
                 {
-                    string columnName = filter.Name;
-                    if (string.IsNullOrWhiteSpace(columnName))
-                    {
-                        columnName = filter.FilterType;
-                    }
+                    string originalName = filter.FilterName;
+                    string columnName = originalName;
 
-                    string originalName = columnName;
                     int number = 2;
+
                     while (table.Columns.Contains(columnName))
                     {
                         columnName = originalName + " " + number;
                         number++;
                     }
+
                     table.Columns.Add(columnName, typeof(string));
                 }
+
                 int rowNumber = 1;
 
                 foreach (string file in files)
                 {
                     string text = ReadFileText(file);
+
                     if (string.IsNullOrWhiteSpace(text))
                         continue;
 
@@ -366,9 +399,7 @@ namespace Word_Data_Extractor
                         row[i + 2] = result;
 
                         if (!string.IsNullOrWhiteSpace(result))
-                        {
                             fileMatches = true;
-                        }
                     }
 
                     if (fileMatches)
@@ -377,26 +408,30 @@ namespace Word_Data_Extractor
                         rowNumber++;
                     }
                 }
+
                 dgv_FilterData.DataSource = table;
 
-                dgv_FilterData.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+                dgv_FilterData.AutoSizeColumnsMode =
+                    DataGridViewAutoSizeColumnsMode.None;
 
                 foreach (DataGridViewColumn column in dgv_FilterData.Columns)
                 {
                     column.Width = 200;
-                    column.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+
+                    column.DefaultCellStyle.WrapMode =
+                        DataGridViewTriState.True;
                 }
 
                 if (dgv_FilterData.Columns.Contains("No."))
-                {
                     dgv_FilterData.Columns["No."].Width = 60;
-                }
 
                 if (dgv_FilterData.Columns.Contains("File Name"))
-                {
                     dgv_FilterData.Columns["File Name"].Width = 250;
-                }
-                dgv_FilterData.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+
+                dgv_FilterData.AutoSizeRowsMode =
+                    DataGridViewAutoSizeRowsMode.AllCells;
+
+                btn_exportData.Enabled = table.Rows.Count > 0;
 
                 MessageBox.Show(
                     $"Filtering completed.\r\n\r\n" +
@@ -405,8 +440,6 @@ namespace Word_Data_Extractor
                     "Complete",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
-
-                btn_exportData.Enabled = dgv_FilterData.Rows.Count > 0;
             }
             catch (Exception ex)
             {
@@ -417,6 +450,8 @@ namespace Word_Data_Extractor
                     MessageBoxIcon.Error);
             }
         }
+
+        // Read TXT, DOCX and DOC
         private string ReadFileText(string filePath)
         {
             string extension = Path.GetExtension(filePath).ToLowerInvariant();
@@ -440,13 +475,11 @@ namespace Word_Data_Extractor
                             StringBuilder text = new StringBuilder();
 
                             foreach (var paragraph in document.Paragraphs)
-                            {
                                 text.AppendLine(paragraph.Text);
-                            }
 
-                            foreach (var table in document.Tables)
+                            foreach (var wordTable in document.Tables)
                             {
-                                foreach (var row in table.Rows)
+                                foreach (var row in wordTable.Rows)
                                 {
                                     foreach (var cell in row.GetTableCells())
                                     {
@@ -481,37 +514,39 @@ namespace Word_Data_Extractor
             catch (NotSupportedException ex)
             {
                 Debug.Print(
-                     $"Unsupported operation while reading:\n{filePath}\n\n" +
-                     $"Error: {ex.Message}\n\n" +
-                     $"Details:\n{ex.StackTrace}");
+                    $"Unsupported operation while reading:\n{filePath}\n{ex}");
 
                 throw;
             }
             catch (Exception ex)
             {
-                Debug.Print(
-                    $"Cannot read file:\n{filePath}\n\n{ex}");
+                Debug.Print($"Cannot read file:\n{filePath}\n{ex}");
 
                 return "";
             }
-
         }
-        private string SearchFilter(string text, FilterDefinition filter)
+        private CheckBox? FindCheckBox(Control parent, string namePrefix)
         {
-            if (string.IsNullOrWhiteSpace(text))
-                return "";
-
-            switch (filter.FilterType)
+            foreach (Control child in parent.Controls)
             {
-                case "Lines Number":
-                    return SearchLines(text, filter.StartLine, filter.EndLine);
-                case "After Lines Matched":
-                    return SearchLinesAfter(text, filter.FindMatch, filter.StartLine, filter.EndLine, filter.TextLenght);
-                default:
-                    return "";
+                if (child is CheckBox checkBox &&
+                    checkBox.Name.StartsWith(
+                        namePrefix,
+                        StringComparison.OrdinalIgnoreCase))
+                {
+                    return checkBox;
+                }
+
+                CheckBox? result = FindCheckBox(child, namePrefix);
+
+                if (result != null)
+                    return result;
             }
+
+            return null;
         }
-        private string SearchLines(string text, int startLine, int endLine)
+        // Search matching text
+        private string SearchFilter(string text, FilterDefinition filter)
         {
             if (string.IsNullOrWhiteSpace(text))
                 return "";
@@ -520,74 +555,95 @@ namespace Word_Data_Extractor
                 new[] { "\r\n", "\n", "\r" },
                 StringSplitOptions.None);
 
-            if (startLine < 1 || endLine < startLine)
-                return "";
+            int totalLines = lines.Length;
 
-            List<string> results = new List<string>();
+            int sectionStart = filter.sectionStartLine > 0
+                ? filter.sectionStartLine
+                : 1;
 
-            int firstLine = startLine - 1;
-            int lastLine = Math.Min(endLine, lines.Length);
+            int sectionEnd = filter.sectionEndLine > 0
+                ? Math.Min(filter.sectionEndLine, totalLines)
+                : totalLines;
 
-            for (int i = firstLine; i < lastLine; i++)
+            int rangeStart = filter.rangeStartLine > 0
+                ? filter.rangeStartLine
+                : 1;
+
+            int rangeEnd = filter.rangeEndLine > 0
+                ? filter.rangeEndLine
+                : int.MaxValue;
+
+            string findMatch = filter.FindMatch;
+
+            if (string.IsNullOrWhiteSpace(findMatch) ||
+                sectionStart > sectionEnd ||
+                sectionStart > totalLines ||
+                rangeStart > rangeEnd)
             {
-                string line = lines[i].Trim();
-
-                if (!string.IsNullOrWhiteSpace(line))
-                {
-                    results.Add(line);
-                }
+                return "";
             }
 
-            return string.Join(Environment.NewLine, results);
-        }
-
-        private string SearchLinesAfter(string text, string FindMatch, int startLine, int endLine, int TextLeng)
-        {
-            if (string.IsNullOrWhiteSpace(text) || string.IsNullOrWhiteSpace(FindMatch) || endLine < 1 || startLine > endLine)
-                return "";
-
-            string[] lines = text.Split(new[] { "\r\n", "\n", "\r" }, StringSplitOptions.None);
-            if (startLine > lines.Length)
-                return "";
-            for (int i = 1; i < lines.Length; i++)
+            for (int i = sectionStart - 1; i < sectionEnd; i++)
             {
-                if (lines[i].Contains(
-                    FindMatch,
-                    StringComparison.OrdinalIgnoreCase))
+                int matchIndex = lines[i].IndexOf(
+                    findMatch,
+                    StringComparison.OrdinalIgnoreCase);
+
+                if (matchIndex < 0)
+                    continue;
+
+                List<string> results = new List<string>();
+                int extractedLine = 0;
+
+                for (int j = i; j < sectionEnd; j++)
                 {
-                    List<string> results = new List<string>();
+                    string line = lines[j].Trim();
 
+                    if (string.IsNullOrWhiteSpace(line))
+                        continue;
 
-                    int findLine = 1;
-                    for (int j = i + 1; j < lines.Length; j++)
+                    if (j == i && !filter.includeText)
                     {
-                        string line = lines[j].Trim();
+                        int index = line.IndexOf(
+                            findMatch,
+                            StringComparison.OrdinalIgnoreCase);
 
-                        if (string.IsNullOrWhiteSpace(line))
-                            continue;
-                        else
-                            if (findLine >= startLine)
-                            {
-                                if (TextLeng > 0 && line.Length > TextLeng)
-                                {
-                                    line = line.Substring(0, TextLeng);
-                                }
-
-                                results.Add(line);
-
-                            }
-                        findLine = findLine + 1;
-                        if (results.Count >= endLine)
-                            break;
+                        if (index >= 0)
+                        {
+                            line = line.Remove(index, findMatch.Length).Trim();
+                        }
                     }
 
-                    return string.Join(Environment.NewLine, results);
+                    extractedLine++;
+
+                    if (extractedLine >= rangeStart &&
+                        extractedLine <= rangeEnd &&
+                        !string.IsNullOrWhiteSpace(line))
+                    {
+                        results.Add(line);
+                    }
+
+                    if (extractedLine >= rangeEnd)
+                        break;
                 }
+
+                string result = string.Join(
+                    Environment.NewLine, results);
+
+                if (filter.TextLenght > 0 &&
+                    result.Length > filter.TextLenght)
+                {
+                    result = result.Substring(0, filter.TextLenght);
+                }
+
+                return result;
             }
 
             return "";
         }
 
+
+        // Read filter inputs
         private List<FilterDefinition> GetFilters()
         {
             List<FilterDefinition> filters = new List<FilterDefinition>();
@@ -604,80 +660,121 @@ namespace Word_Data_Extractor
                 if (groupBox == null)
                     continue;
 
-                string filterType = groupBox.Text.Trim();
+                string filterName = groupBox.Text.Trim();
 
+                TextBox? findBox =
+                    FindTextBox(groupBox, "txbxSearchValue");
 
-                TextBox? nameBox = FindTextBox(groupBox, "filterboxName");
-                TextBox? startBox = FindTextBox(groupBox, "tbxLinesStart");
-                TextBox? endBox = FindTextBox(groupBox, "tbxLinesEnd");
-                TextBox? findBox = FindTextBox(groupBox, "tbxStringMatch");
-                TextBox? LenghtBox = FindTextBox(groupBox, "tbxStringlengh");
+                TextBox? sectionStartBox =
+                    FindTextBox(groupBox, "txbxSearchBetweenLineStart");
 
+                TextBox? sectionEndBox =
+                    FindTextBox(groupBox, "txbxSearchBetweenLineEnd");
 
-                if (filterType != "Lines Number" &&
-                    filterType != "After Lines Matched")
-                {
-                    MessageBox.Show($"Unknown filter type: {filterType}");
-                    return new List<FilterDefinition>();
-                }
+                TextBox? rangeStartBox =
+                    FindTextBox(groupBox, "txbxFilterBetweenLineStart");
 
-                if (startBox == null ||
-                    endBox == null ||
-                    !int.TryParse(startBox.Text.Trim(), out int start) ||
-                    !int.TryParse(endBox.Text.Trim(), out int end) ||
-                    start < 1 ||
-                    end < start)
+                TextBox? rangeEndBox =
+                    FindTextBox(groupBox, "txbxFilterBetweenLineEnd");
+
+                TextBox? lengthBox =
+                    FindTextBox(groupBox, "txbxFilterBetweenLineLenght");
+                CheckBox? includeTextBox =
+                    FindCheckBox(groupBox, "cbIncludeSearchText");
+
+                bool includeSearchText = includeTextBox?.Checked ?? false;
+                if (findBox == null ||
+                    string.IsNullOrWhiteSpace(findBox.Text))
                 {
                     MessageBox.Show(
-                        $"Please enter valid Start and End line numbers for '{filterType}'.",
-                        "Invalid Line Range",
+                        $"Please enter a Search Value for '{filterName}'.",
+                        "Filter Data",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Warning);
 
                     return new List<FilterDefinition>();
                 }
-                if (!int.TryParse(LenghtBox.Text.Trim(), out int Stringlengh))
+
+                int sectionStart = 1;
+                int sectionEnd = 0;
+                int rangeStart = 1;
+                int rangeEnd = 0;
+                int textLength = 0;
+
+                if (!TryReadOptionalInt(
+                    sectionStartBox, ref sectionStart, "Search Section Start"))
+                    return new List<FilterDefinition>();
+
+                if (!TryReadOptionalInt(
+                    sectionEndBox, ref sectionEnd, "Search Section End"))
+                    return new List<FilterDefinition>();
+
+                if (!TryReadOptionalInt(
+                    rangeStartBox, ref rangeStart, "Filter Range Start"))
+                    return new List<FilterDefinition>();
+
+                if (!TryReadOptionalInt(
+                    rangeEndBox, ref rangeEnd, "Filter Range End"))
+                    return new List<FilterDefinition>();
+
+                if (!TryReadOptionalInt(
+                    lengthBox, ref textLength, "Text Length"))
+                    return new List<FilterDefinition>();
+
+                if (sectionStart < 1 ||
+                    (sectionEnd > 0 && sectionEnd < sectionStart) ||
+                    rangeStart < 1 ||
+                    (rangeEnd > 0 && rangeEnd < rangeStart) ||
+                    textLength < 0)
                 {
+                    MessageBox.Show(
+                        $"Invalid line range or text length for '{filterName}'.",
+                        "Filter Data",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+
                     return new List<FilterDefinition>();
                 }
 
-                string searchValue = string.Empty;
-
-
-                if (filterType == "After Lines Matched")
+                filters.Add(new FilterDefinition
                 {
-                    if (findBox == null ||
-                        string.IsNullOrWhiteSpace(findBox.Text))
-                    {
-                        MessageBox.Show(
-                            $"Please enter the Find text for '{filterType}'.",
-                            "Missing Search Text",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Warning);
-
-                        return new List<FilterDefinition>();
-                    }
-
-                    searchValue = findBox.Text.Trim();
-                }
-
-                FilterDefinition filter = new FilterDefinition
-                {
-                    FilterType = filterType,
-                    Name = nameBox?.Text.Trim() ?? string.Empty,
-                    FindMatch = searchValue,
-                    Value = searchValue,
-                    TextLenght = Stringlengh,
-                    StartLine = start,
-                    EndLine = end
-                };
-
-                filters.Add(filter);
+                    FilterName = filterName,
+                    FindMatch = findBox.Text.Trim(),
+                    TextLenght = textLength,
+                    sectionStartLine = sectionStart,
+                    sectionEndLine = sectionEnd,
+                    rangeStartLine = rangeStart,
+                    rangeEndLine = rangeEnd,
+                    includeText = includeSearchText
+                });
             }
 
             return filters;
         }
 
+        private bool TryReadOptionalInt(
+            TextBox? textBox,
+            ref int value,
+            string fieldName)
+        {
+            if (textBox == null || string.IsNullOrWhiteSpace(textBox.Text))
+                return true;
+
+            if (!int.TryParse(textBox.Text.Trim(), out value))
+            {
+                MessageBox.Show(
+                    $"Please enter a valid number for {fieldName}.",
+                    "Filter Data",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                return false;
+            }
+
+            return true;
+        }
+
+        // Find textbox recursively
         private TextBox? FindTextBox(Control parent, string namePrefix)
         {
             foreach (Control child in parent.Controls)
@@ -699,28 +796,29 @@ namespace Word_Data_Extractor
             return null;
         }
 
+        // Export DataGridView to Excel
         private void btn_exportData_Click(object sender, EventArgs e)
         {
             try
             {
-                // Check whether the DataGridView contains data
                 if (dgv_FilterData.Rows.Count == 0 ||
-                (dgv_FilterData.Rows.Count == 1 &&
-                dgv_FilterData.Rows[0].IsNewRow))
+                    (dgv_FilterData.Rows.Count == 1 &&
+                     dgv_FilterData.Rows[0].IsNewRow))
                 {
                     MessageBox.Show(
-                    "No data available to export.",
-                    "Export Excel",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                        "No data available to export.",
+                        "Export Excel",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
 
                     return;
                 }
 
-                // Select the Excel file location
                 using (SaveFileDialog saveDialog = new SaveFileDialog())
                 {
-                    saveDialog.Filter = "Excel Workbook (*.xlsx)|*.xlsx";
+                    saveDialog.Filter =
+                        "Excel Workbook (*.xlsx)|*.xlsx";
+
                     saveDialog.Title = "Export Data to Excel";
                     saveDialog.FileName = "FilteredData.xlsx";
                     saveDialog.DefaultExt = "xlsx";
@@ -728,86 +826,96 @@ namespace Word_Data_Extractor
 
                     if (saveDialog.ShowDialog() != DialogResult.OK)
                         return;
-
-                    // Create Excel workbook and worksheet
                     IWorkbook workbook = new XSSFWorkbook();
-                    ISheet sheet = workbook.CreateSheet("Filtered Data");
-
-                    // Create header row
-                    IRow headerRow = sheet.CreateRow(0);
-
-                    for (int col = 0; col < dgv_FilterData.Columns.Count; col++)
+                    try
                     {
-                        if (!dgv_FilterData.Columns[col].Visible)
-                            continue;
+                        ISheet sheet = workbook.CreateSheet("Filtered Data");
 
-                        NPOI.SS.UserModel.ICell cell = headerRow.CreateCell(col);
-                        cell.SetCellValue(
-                            dgv_FilterData.Columns[col].HeaderText);
-                    }
+                        // Export visible columns only.
+                        List<int> visibleColumns = new List<int>();
 
-                    // Create header style
-                    ICellStyle headerStyle = workbook.CreateCellStyle();
-                    IFont headerFont = workbook.CreateFont();
-                    headerFont.IsBold = true;
-                    headerStyle.SetFont(headerFont);
-
-                    for (int col = 0; col < dgv_FilterData.Columns.Count; col++)
-                    {
-                        if (!dgv_FilterData.Columns[col].Visible)
-                            continue;
-
-                        headerRow.GetCell(col).CellStyle = headerStyle;
-                    }
-
-                    // Export data rows
-                    int excelRowIndex = 1;
-
-                    foreach (DataGridViewRow dgvRow in dgv_FilterData.Rows)
-                    {
-                        if (dgvRow.IsNewRow)
-                            continue;
-
-                        IRow excelRow = sheet.CreateRow(excelRowIndex++);
-
-                        for (int col = 0; col < dgv_FilterData.Columns.Count; col++)
+                        for (int col = 0;
+                             col < dgv_FilterData.Columns.Count;
+                             col++)
                         {
-                            if (!dgv_FilterData.Columns[col].Visible)
-                                continue;
+                            if (dgv_FilterData.Columns[col].Visible)
+                                visibleColumns.Add(col);
+                        }
 
-                            object value = dgvRow.Cells[col].Value;
+                        // Header
+                        IRow headerRow = sheet.CreateRow(0);
 
-                            NPOI.SS.UserModel.ICell cell = excelRow.CreateCell(col);
+                        ICellStyle headerStyle =
+                            workbook.CreateCellStyle();
+
+                        IFont headerFont = workbook.CreateFont();
+                        headerFont.IsBold = true;
+                        headerStyle.SetFont(headerFont);
+
+                        for (int excelCol = 0;
+                             excelCol < visibleColumns.Count;
+                             excelCol++)
+                        {
+                            int dgvCol = visibleColumns[excelCol];
+
+                            NPOI.SS.UserModel.ICell cell =
+                                headerRow.CreateCell(excelCol);
 
                             cell.SetCellValue(
-                                value == null || value == DBNull.Value
+                                dgv_FilterData.Columns[dgvCol].HeaderText);
+
+                            cell.CellStyle = headerStyle;
+                        }
+
+                        // Data rows
+                        int excelRowIndex = 1;
+
+                        foreach (DataGridViewRow dgvRow in dgv_FilterData.Rows)
+                        {
+                            if (dgvRow.IsNewRow)
+                                continue;
+
+                            IRow excelRow = sheet.CreateRow(excelRowIndex++);
+
+                            for (int excelCol = 0;
+                                 excelCol < visibleColumns.Count;
+                                 excelCol++)
+                            {
+                                int dgvCol = visibleColumns[excelCol];
+
+                                object? value = dgvRow.Cells[dgvCol].Value;
+
+                                NPOI.SS.UserModel.ICell cell =
+                                    excelRow.CreateCell(excelCol);
+
+                                cell.SetCellValue(
+                                    value == null || value == DBNull.Value
                                     ? ""
                                     : value.ToString());
+                            }
                         }
-                    }
 
-                    // Automatically adjust column widths
-                    for (int col = 0; col < dgv_FilterData.Columns.Count; col++)
-                    {
-                        if (dgv_FilterData.Columns[col].Visible)
+                        // Auto-size exported columns.
+                        for (int col = 0; col < visibleColumns.Count; col++)
                         {
                             sheet.AutoSizeColumn(col);
                         }
-                    }
 
-                    // Save Excel file
-                    using (FileStream fileStream = new FileStream(
-                        saveDialog.FileName,
-                        FileMode.Create,
-                        FileAccess.Write))
+                        using (FileStream fileStream = new FileStream(
+                            saveDialog.FileName,
+                            FileMode.Create,
+                            FileAccess.Write))
+                        {
+                            workbook.Write(fileStream);
+                        }
+                    }
+                    finally
                     {
-                        workbook.Write(fileStream);
+                        workbook.Close();
                     }
-
-                    workbook.Close();
 
                     MessageBox.Show(
-                        "Data exported successfully!\n\n" +
+                        "Data exported successfully!\r\n\r\n" +
                         "File: " + saveDialog.FileName,
                         "Export Complete",
                         MessageBoxButtons.OK,
@@ -817,12 +925,11 @@ namespace Word_Data_Extractor
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    "Error exporting data to Excel:\n\n" + ex.Message,
+                    "Error exporting data to Excel:\r\n\r\n" + ex.Message,
                     "Export Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
-
         }
     }
 }

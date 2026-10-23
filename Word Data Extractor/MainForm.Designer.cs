@@ -33,7 +33,7 @@
             p_FilterContainer = new Panel();
             p_FilterSetting = new Panel();
             panel2 = new Panel();
-            cb_FilterForm = new ComboBox();
+            txbx_FilterName = new TextBox();
             panel1 = new Panel();
             btn_AddFilterForm = new Button();
             gb_DirectoryContainer = new GroupBox();
@@ -105,21 +105,20 @@
             // 
             // panel2
             // 
-            panel2.Controls.Add(cb_FilterForm);
+            panel2.Controls.Add(txbx_FilterName);
             panel2.Dock = DockStyle.Fill;
             panel2.Location = new Point(0, 0);
             panel2.Name = "panel2";
             panel2.Size = new Size(222, 25);
             panel2.TabIndex = 1;
             // 
-            // cb_FilterForm
+            // txbx_FilterName
             // 
-            cb_FilterForm.Dock = DockStyle.Fill;
-            cb_FilterForm.FormattingEnabled = true;
-            cb_FilterForm.Location = new Point(0, 0);
-            cb_FilterForm.Name = "cb_FilterForm";
-            cb_FilterForm.Size = new Size(222, 23);
-            cb_FilterForm.TabIndex = 0;
+            txbx_FilterName.Dock = DockStyle.Fill;
+            txbx_FilterName.Location = new Point(0, 0);
+            txbx_FilterName.Name = "txbx_FilterName";
+            txbx_FilterName.Size = new Size(222, 23);
+            txbx_FilterName.TabIndex = 0;
             // 
             // panel1
             // 
@@ -298,6 +297,7 @@
             gb_FilterContainer.PerformLayout();
             p_FilterSetting.ResumeLayout(false);
             panel2.ResumeLayout(false);
+            panel2.PerformLayout();
             panel1.ResumeLayout(false);
             gb_DirectoryContainer.ResumeLayout(false);
             gb_DirectoryContainer.PerformLayout();
@@ -319,7 +319,6 @@
         private GroupBox gb_FilterContainer;
         private Panel p_FilterSetting;
         private Panel panel2;
-        private ComboBox cb_FilterForm;
         private Panel panel1;
         private Button btn_AddFilterForm;
         private Panel p_FilterContainer;
@@ -331,5 +330,6 @@
         private Panel panel8;
         private DataGridView dgv_FilterData;
         private Button btn_reset;
+        private TextBox txbx_FilterName;
     }
 }
