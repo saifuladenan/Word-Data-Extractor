@@ -1,12 +1,12 @@
 ﻿using NPOI.HWPF;
 using NPOI.HWPF.Extractor;
-using NPOI.XWPF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using NPOI.XWPF.UserModel;
 using System.Data;
 using System.Diagnostics;
-
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Word_Data_Extractor
 {
@@ -103,7 +103,7 @@ namespace Word_Data_Extractor
                 filterName = $"Filter{number}";
 
             int smallHeight = 20;
-            int bigHeight = 165;
+            int bigHeight = 200;
 
             GroupBox groupBoxFilter = new GroupBox
             {
@@ -258,19 +258,37 @@ namespace Word_Data_Extractor
             groupBoxFilter.Controls.Add(txbxFilterBetweenLineStart);
             groupBoxFilter.Controls.Add(txbxFilterBetweenLineEnd);
             groupBoxFilter.Controls.Add(txbxFilterBetweenLineLength);
+            //include regex
+            Label lblFilterRegex = new Label
+            {
+                Name = $"lblFilterRegex{number}",
+                Text = "Regex",
+                AutoSize = true,
+                Location = new Point(5, 145)
+            };
+
+            TextBox txbxFilterRegex = new TextBox
+            {
+                Name = $"txbxFilterRegex{number}",
+                BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle,
+                Width = 200,
+                Location = new Point(80, 140)
+            };
+            groupBoxFilter.Controls.Add(lblFilterRegex);
+            groupBoxFilter.Controls.Add(txbxFilterRegex);
             //include check box
             CheckBox cbIncludeSearchText = new CheckBox
             {
                 Name = $"cbIncludeSearchText{number}",
                 AutoSize = true,
-                Location = new Point(10, 140)
+                Location = new Point(10, 170)
             };
             Label lblIncludeSearchText = new Label
             {
                 Name = $"lblIncludeSearchText{number}",
                 Text = "Include Search Text",
                 AutoSize = true,
-                Location = new Point(25, 140)
+                Location = new Point(25, 170)
             };
             groupBoxFilter.Controls.Add(lblIncludeSearchText);
             groupBoxFilter.Controls.Add(cbIncludeSearchText);
@@ -313,6 +331,7 @@ namespace Word_Data_Extractor
         {
             public string FilterName { get; set; } = string.Empty;
             public string FindMatch { get; set; } = string.Empty;
+            public string FindRegex { get; set; } = string.Empty;
             public int TextLenght { get; set; }
             public int sectionStartLine { get; set; }
             public int sectionEndLine { get; set; }
@@ -574,6 +593,7 @@ namespace Word_Data_Extractor
                 : int.MaxValue;
 
             string findMatch = filter.FindMatch;
+           
 
             if (string.IsNullOrWhiteSpace(findMatch) ||
                 sectionStart > sectionEnd ||
@@ -630,6 +650,15 @@ namespace Word_Data_Extractor
                 string result = string.Join(
                     Environment.NewLine, results);
 
+                string findRegex = filter.FindRegex;
+                if (!string.IsNullOrWhiteSpace(findRegex))
+                {
+                    Match match = Regex.Match(result, findRegex);
+                    if (match.Success)
+                    {
+                        result = match.Value;
+                    }
+                }
                 if (filter.TextLenght > 0 &&
                     result.Length > filter.TextLenght)
                 {
@@ -664,7 +693,8 @@ namespace Word_Data_Extractor
 
                 TextBox? findBox =
                     FindTextBox(groupBox, "txbxSearchValue");
-
+                TextBox? RegexBox =
+                   FindTextBox(groupBox, "txbxFilterRegex");
                 TextBox? sectionStartBox =
                     FindTextBox(groupBox, "txbxSearchBetweenLineStart");
 
@@ -740,6 +770,7 @@ namespace Word_Data_Extractor
                 {
                     FilterName = filterName,
                     FindMatch = findBox.Text.Trim(),
+                    FindRegex = RegexBox.Text.Trim(),
                     TextLenght = textLength,
                     sectionStartLine = sectionStart,
                     sectionEndLine = sectionEnd,
