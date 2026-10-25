@@ -290,6 +290,20 @@ namespace Word_Data_Extractor
                 AutoSize = true,
                 Location = new Point(25, 170)
             };
+            Button btnRemoveFilter = new Button
+            {
+                Name = $"btnRemoveFilter{number}",
+                Text = "Remove",
+                Location = new Point(150, 165)
+            };
+            btnRemoveFilter.Click += (sender, e) =>
+            {
+                p_FilterContainer.Controls.Remove(filterPanel);
+                filterPanel.Dispose();
+
+                Updatebtn_FilterData();
+            };
+            groupBoxFilter.Controls.Add(btnRemoveFilter);
             groupBoxFilter.Controls.Add(lblIncludeSearchText);
             groupBoxFilter.Controls.Add(cbIncludeSearchText);
             filterPanel.Controls.Add(groupBoxFilter);

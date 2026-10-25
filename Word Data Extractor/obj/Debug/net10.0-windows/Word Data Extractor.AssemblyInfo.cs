@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Word Data Extractor")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c64ed5eb495b9a2447011435b8f107fade647af4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+61769b6eb33bae2f147dc5026315c79a626fe044")]
 [assembly: System.Reflection.AssemblyProductAttribute("Word Data Extractor")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Word Data Extractor")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
