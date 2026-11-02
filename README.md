@@ -5,7 +5,8 @@
 
 <h3>Introduction</h3>
 <p size = 10 align = 'Justify'>
-    Word Data Extractor is an automated data extraction tool designed to process large volumes of text files, identify       relevant information using dynamically generated search anchors, and extract the results into structured Excel           spreadsheets. It reduces the need for manual searching, copying, and organizing of information.
+Word Data Extractor is an automated data extraction tool designed to process large volumes of text files. It dynamically generates search anchors to identify and retrieve relevant information, even when the source files contain minor formatting inconsistencies such as differences in spacing, line breaks, and text arrangement.
+The extracted information is then organized and compiled into structured Excel spreadsheets for easier review, analysis, and reporting.
 </p>
 
 <h3>Problem Statement</h3>
