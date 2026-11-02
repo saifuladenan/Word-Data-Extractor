@@ -13,3 +13,13 @@
 <h5 align = 'Justify'>
     To simplify and accelerate the process of extracting relevant information from large text files through dynamic anchor      generation and automated Excel data compilation, minimizing manual effort while improving productivity and consistency.
 </h5>
+
+<h3>Features</h3>
+<h3>Technologies Used</h3>
+<h3>Limitations</h3>
+<h3>Future Improvements</h3>
+<h3>Author / Developer</h3>
+
+
+
+
