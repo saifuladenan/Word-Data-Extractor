@@ -20,13 +20,30 @@ The extracted information is then organized and compiled into structured Excel s
 </p>
 
 <h3>Features</h3>
-<img src="images/Word Data Extactor.png" width="80%" style="display: block; margin: 0 auto;">
-<p size = 8 align = 'Justify'>
-    image 1.0 : Program interface.
+<p align="center">
+  <img src="images/Word%20Data%20Extactor.png"
+       width="80%"
+       style="border: 1px solid #ccc; border-radius: 6px;"
+       alt="Word Data Extractor Program Interface">
 </p>
-<img src="images/Word Data Extactor.png" width="80%" style="display: block; margin: 0 auto;">
-<p size = 8 align = 'Justify'>
-    image 1.0 : Program interface.
+
+<p align="center">
+  <em>Figure 1.0: Word Data Extractor Program Interface</em>
+</p>
+
+<br>
+
+<p align="center">
+  <img src="images/example%20doc.png"
+       width="60%"
+       style="border: 1px solid #ccc; border-radius: 6px;"
+       alt="Example Source Document">
+</p>
+
+<p align="center">
+  <em>Figure 2.0: Example Source Document</em>
+</p>
+<p size = 10 align = 'Justify'>
 </p>
 <h3>Technologies Used</h3>
 <p size = 10 align = 'Justify'>
