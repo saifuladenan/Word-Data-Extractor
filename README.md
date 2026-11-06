@@ -21,7 +21,12 @@ The extracted information is then organized and compiled into structured Excel s
 
 <h3>Features</h3>
 <img src="images/Word Data Extactor.png" width="80%" style="display: block; margin: 0 auto;">
-<p size = 10 align = 'Justify'>
+<p size = 8 align = 'Justify'>
+    image 1.0 : Program interface.
+</p>
+<img src="images/Word Data Extactor.png" width="80%" style="display: block; margin: 0 auto;">
+<p size = 8 align = 'Justify'>
+    image 1.0 : Program interface.
 </p>
 <h3>Technologies Used</h3>
 <p size = 10 align = 'Justify'>
