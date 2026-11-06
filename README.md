@@ -20,6 +20,7 @@ The extracted information is then organized and compiled into structured Excel s
 </p>
 
 <h3>Features</h3>
+<img src="images/Word Data Extactor.png" width="80%" style="display: block; margin: 0 auto;">
 <p size = 10 align = 'Justify'>
 </p>
 <h3>Technologies Used</h3>
