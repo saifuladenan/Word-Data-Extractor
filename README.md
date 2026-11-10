@@ -28,7 +28,7 @@ The extracted information is then organized and compiled into structured Excel s
 </p>
 
 <p align="center">
-  <em>Figure 1.0: Word Data Extractor Program Interface</em>
+  <em>Figure 4.1: Word Data Extractor Program Interface</em>
 </p>
 
 <br>
@@ -41,10 +41,57 @@ The extracted information is then organized and compiled into structured Excel s
 </p>
 
 <p align="center">
-  <em>Figure 2.0: Example Source Document</em>
+  <em>Figure 4.2: Example Source Document</em>
 </p>
-<p size = 10 align = 'Justify'>
+
+<p size="16" align="Justify">
+    Browse File
 </p>
+<p size="10" align="Justify">
+    Browse and select a folder directory. The system will automatically scan the selected directory and its subfolders to count the relevant files, including .doc, .docx, and .txt files.
+</p>
+<p align="center">
+    <img src="images/Word-Data-Extractor browse.png"
+         width="60%"
+         style="border: 1px solid #ccc; border-radius: 6px;"
+         alt="Word Data Extractor Browse Feature">
+</p>
+<p align="center">
+    <em>Figure 4.3: Browse Folder Feature</em>
+</p>
+
+<p size="16" align="Justify">
+    Generate Filter Option
+</p>
+<p size="10" align="Justify">
+    Enter a name for the filter. The specified name will be used as the column header in the generated results, making it easier to identify the extracted data in the DataGridView and exported file.
+</p>
+<p align="center">
+    <img src="images/Word-Data-Extractor filter.png"
+         width="60%"
+         style="border: 1px solid #ccc; border-radius: 6px;"
+         alt="Word Data Extractor Generate Filter Option">
+</p>
+<p align="center">
+    <em>Figure 4.4: Generate Filter Option</em>
+</p>
+
+<p size="16" align="Justify">
+    Generate Filter Option
+</p>
+<p size="10" align="Justify">
+    Enter a name for the filter. The specified name will be used as the column header in the generated results, making it easier to identify the extracted data in the DataGridView and exported file.
+</p>
+<p align="center">
+    <img src="images/Word-Data-Extractor add filter.png"
+         width="60%"
+         style="border: 1px solid #ccc; border-radius: 6px;"
+         alt="Word Data Extractor Generate Filter Option">
+</p>
+<p align="center">
+    <em>Figure 4.4: Generate Filter Option</em>
+</p>
+
 <h3>Technologies Used</h3>
 <p size = 10 align = 'Justify'>
 </p>
