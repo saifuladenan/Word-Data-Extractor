@@ -131,9 +131,22 @@ The extracted information is then organized and compiled into structured Excel s
 <p align="center">
   <em>Figure 4.2: Example Source Document</em>
 </p>
+
 <h3>Technologies Used</h3>
-<p size = 10 align = 'Justify'>
+<p size="10" align="Justify">
+    
+<b>1. C# (Programming Language)</b><br>
+    C# was used as the primary programming language to develop the application's functionality, including file reading, text extraction, filtering operations, and data processing.<br>
+<b>2. Microsoft Visual Studio (Development Environment)</b><br>
+    Microsoft Visual Studio was used as the Integrated Development Environment (IDE) for writing, debugging, testing, and building the application.<br>
+<b>3. NPOI (Library)</b><br>
+    NPOI is a .NET library that allows the application to read, process, and write Microsoft Office documents, including Word and Excel files.<br>
+<b>4. NPOI.HWPF (Word Document Processing)</b><br>
+    NPOI.HWPF is a component of NPOI used to read and extract text from Microsoft Word .doc files (older Word document format).<br>
+<b>5. System.Text.Encoding.CodePages (Text Encoding Support)</b><br>
+    This library provides support for additional character encodings, particularly legacy code pages. It allows the application to handle documents that use different text encodings and helps ensure proper text extraction.
 </p>
+
 <h3>Limitations</h3>
 <p size = 10 align = 'Justify'>
 </p>
