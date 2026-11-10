@@ -30,22 +30,9 @@ The extracted information is then organized and compiled into structured Excel s
 <p align="center">
   <em>Figure 4.1: Word Data Extractor Program Interface</em>
 </p>
-
 <br>
-
-<p align="center">
-  <img src="images/example%20doc.png"
-       width="60%"
-       style="border: 1px solid #ccc; border-radius: 6px;"
-       alt="Example Source Document">
-</p>
-
-<p align="center">
-  <em>Figure 4.2: Example Source Document</em>
-</p>
-
 <p size="16" align="Justify">
-    Browse File
+    <b>Browse File</b>
 </p>
 <p size="10" align="Justify">
     Browse and select a folder directory. The system will automatically scan the selected directory and its subfolders to count the relevant files, including .doc, .docx, and .txt files.
@@ -57,41 +44,93 @@ The extracted information is then organized and compiled into structured Excel s
          alt="Word Data Extractor Browse Feature">
 </p>
 <p align="center">
-    <em>Figure 4.3: Browse Folder Feature</em>
+    <em>Figure 4.1.1: Word Data Extractor Browse Feature</em>
 </p>
 
 <p size="16" align="Justify">
-    Generate Filter Option
+    <b>Generate Filter Option</b>
 </p>
 <p size="10" align="Justify">
     Enter a name for the filter. The specified name will be used as the column header in the generated results, making it easier to identify the extracted data in the DataGridView and exported file.
+</p>
+<p align="center">
+         <img src="images/Word-Data-Extractor add filter.png"
+         width="60%"
+         style="border: 1px solid #ccc; border-radius: 6px;"
+         alt="Word Data Extractor Generate Filter Option">
+</p>
+<p align="center">
+    <em>Figure 4.1.2: Word Data Extractor Generate Filter Option</em>
+</p>
+
+<p size="16" align="Justify">
+    <b>Filter Value</b>
+</p>
+<p size="10" align="Justify">
+    <b>Search Value:</b> The keyword or text used as an anchor to locate the desired information in the document. (Required)<br>
+    <b>Search Section:</b> Specifies the section or area of the document in which the system searches for the search value. (Optional)<br>
+    <b>Filter Range Line:</b> Specifies the starting and ending lines to extract after the search value is matched. (Optional)<br>
+    <b>Length:</b> Sets the maximum number of characters to return in the extracted result. (Optional)<br>
+    <b>Regex:</b> Applies a Regular Expression (Regex) pattern to filter and extract specific data formats or text. (Optional)<br>
+    <b>Include Search Text:</b> When checked, the matched search value is included in the extracted result. When unchecked, only the remaining text on the same line is returned, excluding the matched search value.<br>
+    <b>Remove Button:</b> Removes the selected filter configuration.
 </p>
 <p align="center">
     <img src="images/Word-Data-Extractor filter.png"
          width="60%"
          style="border: 1px solid #ccc; border-radius: 6px;"
-         alt="Word Data Extractor Generate Filter Option">
+         alt="Word Data Extractor Filter Value">
 </p>
 <p align="center">
-    <em>Figure 4.4: Generate Filter Option</em>
+    <em>Figure 4.1.3: Word Data Extractor Filter Value</em>
 </p>
 
 <p size="16" align="Justify">
-    Generate Filter Option
+    <b>Filter Control Buttons</b>
 </p>
 <p size="10" align="Justify">
-    Enter a name for the filter. The specified name will be used as the column header in the generated results, making it easier to identify the extracted data in the DataGridView and exported file.
+    <b>Reset Filter:</b> Removes all existing filter configurations from the filter panel. <br>
+    <b>Filter Data:</b> Executes the configured filters, processes the selected documents, and displays the extracted results in the DataGridView (Figure 4.1.5). <br>
+    <b>Export Data:</b> Exports the extracted results into an Excel file for further analysis and record-keeping. <br>
 </p>
 <p align="center">
-    <img src="images/Word-Data-Extractor add filter.png"
+    <img src="images/Word-Data-Extractor-button.png"
          width="60%"
          style="border: 1px solid #ccc; border-radius: 6px;"
-         alt="Word Data Extractor Generate Filter Option">
+         alt="Word Data Extractor Filter Control Buttons">
 </p>
 <p align="center">
-    <em>Figure 4.4: Generate Filter Option</em>
+    <em>Figure 4.1.4: Word Data Extractor Filter Control Buttons</em>
 </p>
 
+
+<p size="16" align="Justify">
+    <b>Display Matched Data</b>
+</p>
+<p size="10" align="Justify">
+    <b>1st Column (No.):</b> Displays the sequential number of each matched data record. <br>
+    <b>2nd Column (File Name):</b> Displays the name of the document from which the data was extracted. <br>
+    <b>Remaining Columns:</b> Display the extracted data based on the respective filter names and configurations.
+</p>
+<p align="center">
+    <img src="images/Word-Data-Extractor data.png"
+         width="60%"
+         style="border: 1px solid #ccc; border-radius: 6px;"
+         alt="Word Data Extractor Display Matched Data">
+</p>
+<p align="center">
+    <em>Figure 4.1.5: Word Data Extractor Display Matched Data</em>
+</p>
+
+<p align="center">
+  <img src="images/example doc.png"
+       width="60%"
+       style="border: 1px solid #ccc; border-radius: 6px;"
+       alt="Example Source Document">
+</p>
+<p align="center">
+  <em>Figure 4.2: Example Source Document</em>
+</p>
 <h3>Technologies Used</h3>
 <p size = 10 align = 'Justify'>
 </p>
